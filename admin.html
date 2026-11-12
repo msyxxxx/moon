@@ -1,0 +1,392 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MOON 🌙 — لوحة التحكم</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--t:#B794D9;--t2:#8B5CB8;--bg:#1A1625;--panel:#241E33;--panel2:#2A2240;--line:#3A2F4D;--muted:#9C8DB0;--red:#ff6b6b;--amber:#f5a623}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Tajawal,sans-serif}
+body{background:var(--bg);color:#EDE4F0;padding-bottom:60px}
+button,input,select,textarea{font-family:inherit;outline:none;border:none;cursor:pointer}
+.login{position:fixed;inset:0;background:radial-gradient(circle at 50% 20%,#2A1F45,#120E1C);display:none;align-items:center;justify-content:center;z-index:500;padding:20px}
+.login .box{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:32px 26px;width:100%;max-width:380px;text-align:center}
+.login h1{font-size:22px;margin-bottom:6px}.login h1 span{color:var(--t)}
+.login p{color:var(--muted);font-size:13px;margin-bottom:22px}
+.login input{width:100%;padding:13px 16px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:#fff;font-size:15px;margin-bottom:12px;text-align:center;cursor:text}
+.login button{width:100%;padding:13px;border-radius:12px;background:var(--t);color:#1A1625;font-weight:800;font-size:15px}
+.back-link{display:inline-flex;align-items:center;gap:6px;margin-top:18px;color:var(--t);text-decoration:none;font-size:13px;font-weight:700;padding:8px 16px;border:1px solid var(--line);border-radius:999px;transition:.2s}
+.back-link:hover{background:var(--panel2);border-color:var(--t)}
+.err{color:var(--red);font-size:13px;min-height:18px;margin-top:6px}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;background:rgba(26,22,37,.95);backdrop-filter:blur(10px);flex-wrap:wrap;gap:10px}
+.brand{font-weight:800;font-size:19px}.brand span{color:var(--t)}
+.topbar .r{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{padding:10px 16px;border-radius:11px;background:var(--t);color:#1A1625;font-weight:800;font-size:13.5px;white-space:nowrap;transition:.2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{background:var(--t2);color:#fff}
+.btn.ghost{background:var(--panel2);color:#E5D6F0;border:1px solid var(--line)}
+.btn.ghost:hover{background:#3A2F4D}
+.btn.danger{background:#3a1d33;color:var(--red);border:1px solid #542a4a}
+.btn.sm{padding:6px 11px;font-size:12px;border-radius:9px}
+.shell{max-width:1280px;margin:0 auto;padding:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.stat .l{font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.stat b{font-size:23px;color:var(--t);display:block}
+.stat.warn b{color:var(--amber)}.stat.info b{color:#A8B5FF}
+.tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.tab-btn{padding:11px 18px;border-radius:12px;background:var(--panel);border:1px solid var(--line);color:var(--muted);font-weight:700;font-size:13.5px;white-space:nowrap}
+.tab-btn.active{background:var(--t);color:#1A1625;border-color:var(--t)}
+.tab{display:none}.tab.active{display:block}
+.pform{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:18px}
+.fh{font-weight:800;font-size:15px;margin-bottom:14px;color:var(--t)}
+.frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:9px}
+.frow input,.frow select{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:#fff;font-size:13.5px;cursor:text}
+.frow input:focus{border-color:var(--t)}
+.frow input[type=file]{padding:8px;font-size:12px;color:var(--muted);cursor:pointer}
+.frow input::placeholder{color:#6B5C82}
+.factions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;align-items:center}
+#mediaPreview{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+#mediaPreview img{width:44px;height:44px;object-fit:cover;border-radius:9px;border:1px solid var(--line)}
+.tablewrap{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.thead{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap}
+.thead h3{font-size:15px}
+.thead input{padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:#fff;font-size:13px;min-width:180px;cursor:text}
+table{width:100%;border-collapse:collapse}
+th,td{padding:11px 14px;text-align:right;font-size:13px;border-bottom:1px solid var(--line)}
+th{background:var(--panel2);color:var(--muted);font-weight:700;font-size:12px;white-space:nowrap}
+tbody tr:last-child td{border-bottom:none}tbody tr:hover{background:#2A2240}
+.td-img{width:38px;height:38px;border-radius:9px;overflow:hidden;background:var(--panel2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.badge{padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:800;background:#3A2F4D;color:#D4C4E0}
+.badge.ok{background:#1f3a2e;color:#6ee9a5}.badge.warn{background:#3d3115;color:#f5c563}.badge.bad{background:#3a1d33;color:#ff8f8f}
+.empty-row{text-align:center;color:var(--muted);padding:30px}
+#toasts{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:900;display:flex;flex-direction:column;gap:8px;align-items:center;width:max-content;max-width:90vw}
+.toast{background:#3A2F4D;color:#fff;padding:12px 22px;border-radius:999px;font-size:13.5px;font-weight:700;box-shadow:0 12px 34px rgba(0,0,0,.4)}
+.toast.ok{background:#0e9f6e}.toast.err{background:#d33}
+.hidden{display:none!important}
+</style></head><body>
+
+<div class="login" id="login">
+  <form class="box" id="loginForm">
+    <h1>MOON <span>🌙 Admin</span></h1>
+    <p id="loginHint">سجّل الدخول للوصول إلى لوحة التحكم</p>
+    <input id="email" type="email" placeholder="البريد الإلكتروني" autocomplete="username">
+    <input id="pw" type="password" placeholder="كلمة المرور" autocomplete="current-password">
+    <button type="submit">دخول</button>
+    <div class="err" id="loginErr"></div>
+    <a href="index.html" class="back-link">← العودة إلى المتجر</a>
+  </form>
+</div>
+
+<div id="app" class="hidden">
+  <div class="topbar">
+    <div class="brand">MOON <span>🌙 Admin</span></div>
+    <div class="r">
+      <span id="userInfo" style="font-size:12px;color:var(--muted)"></span>
+      <a class="btn ghost sm" href="index.html">🏪 المتجر</a>
+      <button class="btn ghost sm" onclick="exportCSV('orders')">📥 الطلبات</button>
+      <button class="btn ghost sm" onclick="exportCSV('products')">📥 المنتجات</button>
+      <button class="btn danger sm" onclick="logout()">خروج</button>
+    </div>
+  </div>
+  <div class="shell">
+    <div class="stats" id="stats"></div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="products">📦 المنتجات</button>
+      <button class="tab-btn" data-tab="orders">🧾 الطلبات</button>
+      <button class="tab-btn" data-tab="settings">⚙️ الإعدادات</button>
+    </div>
+
+    <section class="tab active" id="tab-products">
+      <form class="pform" id="pForm">
+        <div class="fh" id="formTitle">➕ إضافة منتج جديد</div>
+        <div class="frow">
+          <input id="fName" placeholder="اسم المنتج *" required>
+          <input id="fCat" placeholder="الفئة" list="catList"><datalist id="catList"></datalist>
+          <input id="fPrice" type="number" step="0.01" min="0" placeholder="السعر (أوقية) *" required>
+          <input id="fOld" type="number" step="0.01" min="0" placeholder="السعر قبل الخصم (أوقية)">
+          <input id="fStock" type="number" min="0" placeholder="المخزون" value="10">
+          <input id="fRate" type="number" step="0.1" min="0" max="5" placeholder="التقييم" value="4.5">
+          <input id="fEmoji" placeholder="إيموجي" value="📦" maxlength="4">
+          <input id="fDesc" placeholder="وصف قصير">
+        </div>
+        <div class="frow" style="margin-top:9px; grid-template-columns: 1fr 1fr;">
+          <div>
+            <label style="font-size:12px; color:var(--muted); margin-bottom:4px; display:block;">صور المنتج (يمكنك اختيار عدة صور)</label>
+            <input id="fImgs" type="file" accept="image/*" multiple>
+          </div>
+          <div>
+            <label style="font-size:12px; color:var(--muted); margin-bottom:4px; display:block;">فيديو المنتج (اختياري)</label>
+            <input id="fVideo" type="file" accept="video/*">
+          </div>
+        </div>
+        <div class="factions">
+          <div id="mediaPreview"></div>
+          <button type="button" class="btn ghost" onclick="cancelEdit()">إلغاء</button>
+          <button type="submit" class="btn" id="saveBtn">حفظ المنتج</button>
+        </div>
+      </form>
+      <div class="tablewrap">
+        <div class="thead"><h3>📦 قائمة المنتجات</h3><input id="pSearch" placeholder="بحث..."></div>
+        <div style="overflow:auto"><table><thead><tr><th>#</th><th>المنتج</th><th>الفئة</th><th>السعر</th><th>المخزون</th><th>التقييم</th><th>إجراءات</th></tr></thead><tbody id="pBody"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-orders">
+      <div class="tablewrap">
+        <div class="thead"><h3>🧾 الطلبات</h3><input id="oSearch" placeholder="بحث بالاسم أو الهاتف..."></div>
+        <div style="overflow:auto"><table><thead><tr><th>#</th><th>العميل</th><th>الهاتف</th><th>المنتجات</th><th>المجموع</th><th>الحالة</th><th>التاريخ</th><th></th></tr></thead><tbody id="oBody"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="tab" id="tab-settings">
+      <form class="pform" id="sForm" style="max-width:640px">
+        <div class="fh">⚙️ إعدادات المتجر</div>
+        <div class="frow">
+          <input id="sName" placeholder="اسم المتجر">
+          <input id="sCurrency" placeholder="العملة (افتراضي: أوقية)">
+          <input id="sWhatsapp" placeholder="رقم واتساب">
+        </div>
+        <div class="factions"><button class="btn" type="submit">حفظ الإعدادات</button></div>
+        <p style="color:var(--muted);font-size:12.5px;margin-top:14px;line-height:1.8">💡 الوضع: <b id="modeLabel"></b></p>
+      </form>
+    </section>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="api.js"></script>
+<script>
+let PRODUCTS = [], ORDERS = [], SETTINGS = {}, EDIT_ID = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => Number(n || 0).toLocaleString('en-US') + ' ' + (SETTINGS.currency || 'أوقية');
+function toast(msg, type) {
+  const el = document.createElement('div'); el.className = 'toast ' + (type || ''); el.textContent = msg;
+  $('toasts').appendChild(el);
+  setTimeout(() => { el.style.opacity = 0; el.style.transition = '.3s'; setTimeout(() => el.remove(), 300); }, 2200);
+}
+
+async function boot() {
+  SETTINGS = await ANEQ.settings.get();
+  $('modeLabel').textContent = ANEQ.ONLINE ? 'متصل بـ Supabase 🟢' : 'محلي 🟡';
+  if (!ANEQ.ONLINE) $('email').style.display = 'none';
+  const user = await ANEQ.auth.getUser();
+  if (user) showApp(user); else $('login').style.display = 'flex';
+  ANEQ.auth.onChange(u => { if (u) showApp(u); });
+}
+
+$('loginForm').onsubmit = async e => {
+  e.preventDefault(); $('loginErr').textContent = '';
+  try {
+    const input = ANEQ.ONLINE ? $('email').value.trim() : $('pw').value;
+    const data = await ANEQ.auth.signIn(input, $('pw').value);
+    showApp(data.user || {});
+  } catch (err) { $('loginErr').textContent = err.message || 'فشل'; }
+};
+
+async function logout() { await ANEQ.auth.signOut(); location.reload(); }
+
+async function showApp(user) {
+  $('login').style.display = 'none'; $('app').classList.remove('hidden');
+  if (user?.email) $('userInfo').textContent = user.email;
+  await loadAll();
+}
+
+async function loadAll() {
+  try {
+    [PRODUCTS, ORDERS] = await Promise.all([ANEQ.products.list(), ANEQ.orders.list()]);
+    renderStats(); renderProducts(); renderOrders(); renderCatList(); fillSettings();
+  } catch (e) { toast('خطأ: ' + e.message, 'err'); }
+}
+
+async function renderStats() {
+  const s = await ANEQ.stats();
+  $('stats').innerHTML = `
+    <div class="stat"><div class="l">إجمالي المبيعات</div><b>${money(s.sales)}</b></div>
+    <div class="stat info"><div class="l">الطلبات</div><b>${s.orders}</b></div>
+    <div class="stat"><div class="l">المنتجات</div><b>${s.products}</b></div>
+    <div class="stat warn"><div class="l">مخزون منخفض</div><b>${s.lowStock}</b></div>
+    <div class="stat info"><div class="l">جديدة</div><b>${s.pending}</b></div>`;
+}
+
+function renderProducts() {
+  const q = ($('pSearch').value || '').toLowerCase();
+  const list = PRODUCTS.filter(p => !q || (p.name+' '+p.cat).toLowerCase().includes(q));
+  $('pBody').innerHTML = list.length ? list.map(p => `
+    <tr><td>${p.id}</td>
+    <td><div style="display:flex;align-items:center;gap:9px">
+      <div class="td-img">${p.images && p.images.length ? `<img src="${esc(p.images[0])}" style="width:100%;height:100%;object-fit:cover">` : (p.emoji||'📦')}</div>
+      <span>${esc(p.name)}</span></div></td>
+    <td>${esc(p.cat||'-')}</td><td>${money(p.price)}</td>
+    <td><span class="badge ${+p.stock<=0?'bad':(+p.stock<=5?'warn':'ok')}">${p.stock}</span></td>
+    <td>★ ${(+p.rate||0).toFixed(1)}</td>
+    <td style="white-space:nowrap">
+      <button class="btn ghost sm" onclick="editProduct(${p.id})">تعديل</button>
+      <button class="btn danger sm" onclick="delProduct(${p.id})">حذف</button></td></tr>`).join('')
+    : `<tr><td colspan="7" class="empty-row">لا توجد منتجات</td></tr>`;
+}
+
+function renderCatList() {
+  const cats = [...new Set(PRODUCTS.map(p => p.cat).filter(Boolean))];
+  $('catList').innerHTML = cats.map(c => `<option value="${esc(c)}">`).join('');
+}
+
+function editProduct(id) {
+  const p = PRODUCTS.find(x => x.id == id); if (!p) return;
+  EDIT_ID = id;
+  $('fName').value = p.name||''; $('fCat').value = p.cat||'';
+  $('fPrice').value = p.price??''; $('fOld').value = p.old_price||0;
+  $('fStock').value = p.stock??0; $('fRate').value = p.rate??4.5;
+  $('fEmoji').value = p.emoji||'📦'; $('fDesc').value = p.description||'';
+  $('fImgs').value = ''; $('fVideo').value = '';
+  $('mediaPreview').innerHTML = p.images?.length ? p.images.map(img => `<img src="${esc(img)}">`).join('') : '';
+  $('formTitle').textContent = '✏️ تعديل المنتج'; $('saveBtn').textContent = 'تحديث';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function cancelEdit() {
+  EDIT_ID = null; $('pForm').reset();
+  $('fEmoji').value = '📦'; $('fStock').value = 10; $('fRate').value = 4.5;
+  $('mediaPreview').innerHTML = '';
+  $('formTitle').textContent = '➕ إضافة منتج جديد'; $('saveBtn').textContent = 'حفظ المنتج';
+}
+
+$('fImgs').onchange = e => {
+  const files = [...e.target.files];
+  $('mediaPreview').innerHTML = files.map(f => `<img src="${URL.createObjectURL(f)}">`).join('');
+};
+
+$('pForm').onsubmit = async e => {
+  e.preventDefault();
+  const imgFiles = [...$('fImgs').files];
+  const videoFile = $('fVideo').files[0];
+  const btn = $('saveBtn'); btn.disabled = true; btn.textContent = 'جارٍ الرفع...';
+
+  try {
+    let images = [];
+    // رفع الصور
+    for (const f of imgFiles) {
+      if (f.size > 5 * 1024 * 1024) throw new Error('صورة أكبر من 5MB: ' + f.name);
+      images.push(await ANEQ.storage.uploadImage(f));
+    }
+    
+    // رفع الفيديو
+    let video = null;
+    if (videoFile) {
+      if (videoFile.size > 50 * 1024 * 1024) throw new Error('الفيديو أكبر من 50MB');
+      video = await ANEQ.storage.uploadVideo(videoFile);
+    }
+
+    // إذا كان تعديلاً ولم نرفع صوراً جديدة، احتفظ بالقديمة
+    if (!images.length && EDIT_ID) {
+      const old = PRODUCTS.find(x => x.id == EDIT_ID);
+      images = old?.images || [];
+    }
+    if (!video && EDIT_ID) {
+      video = PRODUCTS.find(x => x.id == EDIT_ID)?.video_url;
+    }
+
+    const payload = {
+      name: $('fName').value.trim(), cat: $('fCat').value.trim() || 'عام',
+      price: +$('fPrice').value, oldPrice: +$('fOld').value || 0,
+      stock: +$('fStock').value || 0, rate: +$('fRate').value || 4.5,
+      emoji: $('fEmoji').value.trim() || '📦', desc: $('fDesc').value.trim(),
+      images, video
+    };
+
+    if (EDIT_ID) await ANEQ.products.update(EDIT_ID, payload);
+    else await ANEQ.products.create(payload);
+
+    toast(EDIT_ID ? 'تم التحديث ✓' : 'تمت الإضافة ✓', 'ok');
+    cancelEdit(); await loadAll();
+  } catch (err) { 
+    toast('فشل: ' + err.message, 'err'); 
+  } finally {
+    btn.disabled = false; btn.textContent = EDIT_ID ? 'تحديث' : 'حفظ المنتج';
+  }
+};
+
+async function delProduct(id) {
+  if (!confirm('حذف المنتج؟')) return;
+  try { await ANEQ.products.remove(id); toast('تم', 'ok'); await loadAll(); }
+  catch (e) { toast('فشل: ' + e.message, 'err'); }
+}
+
+const STATUSES = ['جديد','قيد التنفيذ','تم الشحن','مكتمل','ملغي'];
+function renderOrders() {
+  const q = ($('oSearch').value || '').toLowerCase();
+  const list = ORDERS.filter(o => !q || ((o.customer||'')+' '+(o.phone||'')).toLowerCase().includes(q));
+  $('oBody').innerHTML = list.length ? list.map(o => {
+    const items = Array.isArray(o.items) ? o.items : [];
+    const itemTxt = items.map(i => `${esc(i.name)} ×${i.qty}`).join(' · ') || '-';
+    return `<tr>
+      <td>#${String(o.id).slice(-4)}</td><td>${esc(o.customer)}</td>
+      <td dir="ltr" style="text-align:right">${esc(o.phone)}</td>
+      <td style="max-width:200px;font-size:12px;color:var(--muted)">${itemTxt}</td>
+      <td><b>${money(o.total)}</b></td>
+      <td><select onchange="setStatus(${o.id},this.value)" style="background:var(--panel2);color:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:12px;cursor:pointer">${STATUSES.map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select></td>
+      <td style="font-size:11.5px;color:var(--muted)">${esc(o.date||'')}</td>
+      <td><button class="btn danger sm" onclick="delOrder(${o.id})">✕</button></td></tr>`;
+  }).join('') : `<tr><td colspan="8" class="empty-row">لا توجد طلبات</td></tr>`;
+}
+
+async function setStatus(id, status) {
+  try {
+    await ANEQ.orders.update(id, { status });
+    const i = ORDERS.findIndex(x => x.id == id); if (i > -1) ORDERS[i].status = status;
+    renderStats(); toast('تم ✓', 'ok');
+  } catch (e) { toast('فشل: ' + e.message, 'err'); }
+}
+
+async function delOrder(id) {
+  if (!confirm('حذف الطلب؟')) return;
+  try { await ANEQ.orders.remove(id); toast('تم', 'ok'); await loadAll(); }
+  catch (e) { toast('فشل: ' + e.message, 'err'); }
+}
+
+function fillSettings() {
+  $('sName').value = SETTINGS.storeName || '';
+  $('sCurrency').value = SETTINGS.currency || '';
+  $('sWhatsapp').value = SETTINGS.whatsapp || '';
+}
+
+$('sForm').onsubmit = async e => {
+  e.preventDefault();
+  try {
+    SETTINGS = await ANEQ.settings.save({
+      storeName: $('sName').value.trim(),
+      currency: $('sCurrency').value.trim() || 'أوقية',
+      whatsapp: $('sWhatsapp').value.trim()
+    });
+    toast('تم الحفظ ✓', 'ok'); renderStats(); renderProducts(); renderOrders();
+  } catch (err) { toast('فشل: ' + err.message, 'err'); }
+};
+
+document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tab-btn').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  b.classList.add('active'); $('tab-' + b.dataset.tab).classList.add('active');
+});
+
+$('pSearch').oninput = renderProducts;
+$('oSearch').oninput = renderOrders;
+
+function exportCSV(type) {
+  let csv = '';
+  if (type === 'products') {
+    csv = 'الاسم,الفئة,السعر,المخزون,التقييم\n';
+    PRODUCTS.forEach(p => csv += `"${p.name}","${p.cat}",${p.price},${p.stock},${p.rate}\n`);
+  } else {
+    csv = 'رقم,العميل,الهاتف,المجموع,الحالة,التاريخ\n';
+    ORDERS.forEach(o => csv += `${o.id},"${o.customer}","${o.phone}",${o.total},"${o.status}","${o.date||''}"\n`);
+  }
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = `moon_${type}_${Date.now()}.csv`; a.click();
+  toast('تم التصدير ✓', 'ok');
+}
+
+boot();
+</script>
+</body></html>
