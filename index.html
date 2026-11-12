@@ -45,7 +45,7 @@ input[type=range]{width:100%;accent-color:var(--purple-d)}
 .grid{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
 @media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr);gap:16px}}
 @media(min-width:1400px){.grid{grid-template-columns:repeat(4,1fr)}}
-.card{background:#fff;border-radius:18px;padding:11px;border:1px solid var(--line);display:flex;flex-direction:column;transition:.25s}
+.card{background:#fff;border-radius:18px;padding:11px;border:1px solid var(--line);display:flex;flex-direction:column;transition:.25s;cursor:pointer}
 .card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(74,53,112,.12);border-color:var(--purple)}
 .thumb{aspect-ratio:1;border-radius:14px;background:linear-gradient(145deg,#F5EBDC,#E8D9C4);display:flex;align-items:center;justify-content:center;font-size:46px;overflow:hidden;position:relative}
 .thumb img{width:100%;height:100%;object-fit:cover}
@@ -61,6 +61,19 @@ input[type=range]{width:100%;accent-color:var(--purple-d)}
 .add:hover:not(:disabled){background:var(--purple);color:#2D2438}
 .add:disabled{background:#EDE4F0;color:#B8A8C8;cursor:not-allowed}
 .empty{text-align:center;padding:70px 20px;color:var(--muted)}.empty p{margin-top:12px;font-size:15px;font-weight:700}
+
+/* --- نافذة تفاصيل المنتج (Modal) --- */
+.modal{position:fixed;inset:0;z-index:350;display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal-bg{position:absolute;inset:0;background:rgba(45,36,56,.6);backdrop-filter:blur(4px)}
+.modal-body{position:relative;background:#fff;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;border-radius:20px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.pm-main{width:100%;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--beige);display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.pm-main img{width:100%;height:100%;object-fit:contain}
+.pm-thumbs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.pm-thumbs img{width:64px;height:64px;border-radius:10px;object-fit:cover;cursor:pointer;border:2px solid transparent;transition:.2s;background:var(--beige)}
+.pm-thumbs img.active,.pm-thumbs img:hover{border-color:var(--purple-d)}
+
 .scrim{position:fixed;inset:0;background:rgba(45,36,56,.5);z-index:200;display:none}.scrim.show{display:block}
 .drawer{position:fixed;inset:0;z-index:220;display:none}.drawer.open{display:block}
 .ov{position:absolute;inset:0;background:rgba(45,36,56,.55)}
@@ -123,7 +136,7 @@ input[type=range]{width:100%;accent-color:var(--purple-d)}
 
   <main>
     <section class="hero">
-      <h1>تسوّق <em>  هنا ضوء القمر</em></h1>
+      <h1>تسوّق <em> هنا ضوء القمر</em></h1>
       <p>منتجات مختارة بعناية · توصيل سريع · دفع آمن عند الاستلام</p>
     </section>
     <div class="toolbar">
@@ -139,6 +152,12 @@ input[type=range]{width:100%;accent-color:var(--purple-d)}
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty" style="display:none"><div style="font-size:54px">🔍</div><p>لا توجد منتجات مطابقة</p></div>
   </main>
+</div>
+
+<!-- نافذة تفاصيل المنتج -->
+<div class="modal" id="productModal">
+  <div class="modal-bg" onclick="closeAll()"></div>
+  <div class="modal-body" id="productDetails"></div>
 </div>
 
 <div class="drawer" id="cartDrawer">
@@ -208,7 +227,12 @@ function bindEvents() {
   $('btnCart').onclick = () => { $('cartDrawer').classList.add('open'); renderCart(); };
 }
 
-function closeAll() { $('filters').classList.remove('open'); $('scrim').classList.remove('show'); $('cartDrawer').classList.remove('open'); }
+function closeAll() { 
+  $('filters').classList.remove('open'); 
+  $('scrim').classList.remove('show'); 
+  $('cartDrawer').classList.remove('open'); 
+  $('productModal').classList.remove('open');
+}
 
 function resetFilters() {
   F.q = ''; F.rate = 0; F.cats = []; F.inStock = false; F.max = +$('pr').max;
@@ -244,7 +268,8 @@ function cardHTML(p) {
   const out = +p.stock <= 0;
   const off = p.old_price && +p.old_price > +p.price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
   const firstImg = p.images && p.images.length ? p.images[0] : null;
-  return `<article class="card">
+  // تمت إضافة onclick="openProduct()" لفتح النافذة عند الضغط على الكرت
+  return `<article class="card" onclick="openProduct(${p.id})">
     <div class="thumb">${firstImg ? `<img src="${esc(firstImg)}" loading="lazy">` : (p.emoji||'📦')}
       ${off ? `<span class="pill off">-${off}%</span>` : ''}
       ${out ? '<span class="pill out">نفد</span>' : (+p.stock <= 5 ? `<span class="pill">آخر ${p.stock}</span>` : '')}
@@ -254,8 +279,63 @@ function cardHTML(p) {
     <div class="pmeta"><span>${esc(p.cat||'')}</span><span class="rate">★ ${(+p.rate||0).toFixed(1)}</span></div>
     <p class="pdesc">${esc(p.description||'')}</p>
     <div class="prow"><div class="price">${money(p.price)}${off ? `<s>${money(p.old_price)}</s>` : ''}</div></div>
-    <button class="add" ${out?'disabled':''} onclick="addToCart(${p.id})">${out?'غير متوفر':'أضف للسلة'}</button>
+    <!-- event.stopPropagation() تمنع فتح النافذة عند الضغط على زر الإضافة فقط -->
+    <button class="add" ${out?'disabled':''} onclick="event.stopPropagation(); addToCart(${p.id})">${out?'غير متوفر':'أضف للسلة'}</button>
   </article>`;
+}
+
+// --- دالة عرض تفاصيل المنتج ---
+function openProduct(id) {
+  const p = PRODUCTS.find(x => x.id == id);
+  if (!p) return;
+  
+  const out = +p.stock <= 0;
+  const off = p.old_price && +p.old_price > +p.price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
+  const imgs = p.images && p.images.length ? p.images : (p.img ? [p.img] : []);
+
+  // بناء جزء الفيديو إذا وجد
+  let mediaHTML = '';
+  if (p.video_url) {
+    mediaHTML = `<video src="${esc(p.video_url)}" controls style="width:100%;border-radius:14px;margin-bottom:14px;max-height:280px;background:#000;object-fit:contain"></video>`;
+  }
+
+  // بناء معرض الصور
+  let galleryHTML = '';
+  if (imgs.length > 0) {
+    galleryHTML = `
+      <div class="pm-main">
+        <img id="pmMainImg" src="${esc(imgs[0])}">
+      </div>
+      ${imgs.length > 1 ? `
+      <div class="pm-thumbs">
+        ${imgs.map((img, i) => `<img src="${esc(img)}" onclick="document.getElementById('pmMainImg').src='${esc(img)}'; document.querySelectorAll('.pm-thumbs img').forEach(el=>el.classList.remove('active')); this.classList.add('active');" class="${i===0?'active':''}">`).join('')}
+      </div>` : ''}
+    `;
+  } else {
+    galleryHTML = `<div class="pm-main" style="font-size:80px">${p.emoji||'📦'}</div>`;
+  }
+
+  $('productDetails').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+       <h2 style="font-size:18px;font-weight:800">تفاصيل المنتج</h2>
+       <button class="x" onclick="closeAll()" style="font-size:24px">✕</button>
+    </div>
+    ${mediaHTML}
+    ${galleryHTML}
+    <h3 style="font-size:20px;font-weight:800;margin-top:14px;line-height:1.4">${esc(p.name)}</h3>
+    <div class="pmeta" style="margin-top:6px;font-size:13px">
+      <span>${esc(p.cat||'')}</span>
+      <span class="rate" style="color:var(--purple-d);font-weight:700">★ ${(+p.rate||0).toFixed(1)}</span>
+    </div>
+    <div class="pdesc" style="margin-top:10px;font-size:14.5px;color:#555;line-height:1.7">${esc(p.description||'لا يوجد وصف لهذا المنتج')}</div>
+    <div class="prow" style="margin-top:16px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:14px">
+      <div class="price" style="font-size:24px">${money(p.price)} ${off?`<s style="font-size:15px;color:#aaa;margin-right:6px">${money(p.old_price)}</s>`:''}</div>
+      ${out ? `<span class="badge bad" style="padding:6px 12px;border-radius:8px;background:#ffe4e4;color:#c62828">نفدت الكمية</span>` : `<span class="badge ok" style="padding:6px 12px;border-radius:8px;background:#e8f5e9;color:#2e7d32">متوفر: ${p.stock}</span>`}
+    </div>
+    <button class="add" style="margin-top:18px;padding:14px;font-size:15px" ${out?'disabled':''} onclick="addToCart(${p.id}); closeAll();">${out?'غير متوفر':'أضف للسلة الآن'}</button>
+  `;
+  
+  $('productModal').classList.add('open');
 }
 
 function addToCart(id) {
