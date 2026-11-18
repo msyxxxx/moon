@@ -6,7 +6,56 @@
     <title>التوفيق | تسوّق بثقة</title>
     <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        *{box-sizing:border-box}:root{--bg:#171216;--red:#d92343;--text:#fbf7f8;--muted:#b9adb3;--line:#ffffff18}body{margin:0;background:var(--bg);color:var(--text);font-family:"Cairo",sans-serif}.announcement{height:34px;background:#100d10;color:#cfc3c8;display:flex;align-items:center;justify-content:center;gap:20px;font-size:10px}.site-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:20px;padding:12px 5%;background:#191418ed;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:white}.brand-mark{width:43px;height:43px;display:grid;place-items:center;background:linear-gradient(145deg,#e63855,#a80d2c);border-radius:13px;font-size:25px;font-weight:900}.brand b{display:block;font-size:20px}.brand small{display:block;color:#b8aeb3;font-size:9px}.search{display:flex;flex:1;max-width:400px;background:#2a2229;border:1px solid var(--line);border-radius:9px;overflow:hidden}.search input{background:none;border:0;color:white;padding:11px 16px;width:100%;font:12px "Cairo"}.search button{width:48px;border:0;background:var(--red);color:white;cursor:pointer}nav{display:flex;gap:20px;margin-right:auto}nav a{color:#d7cdd1;text-decoration:none;font-size:12px}nav a:hover{color:#f16b80}.cart-button{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:9px;background:#2b2229;color:white;padding:8px 13px;cursor:pointer;font:600 12px "Cairo"}.cart-button b{background:var(--red);border-radius:20px;padding:0 7px;font-size:10px}.hero{min-height:450px;position:relative;overflow:hidden;display:flex;align-items:center;padding:60px 8%;background:radial-gradient(ellipse at 75% 55%,#6e1c32 0,transparent 35%),linear-gradient(110deg,#21151d,#4b1728 54%,#21151d)}.hero-copy{position:relative;z-index:4;width:60%}.hero h1{font-size:clamp(40px,5vw,60px);line-height:1.2;margin:18px 0;color:white;font-weight:900}.hero h1 em{font-style:normal;color:#ed9ba7}.hero p{color:#d7c9cf;max-width:430px;font-size:13px;line-height:1.8}.primary-btn{display:inline-flex;align-items:center;gap:15px;background:linear-gradient(120deg,#e33a56,#b71636);border:0;border-radius:8px;color:white;padding:12px 23px;margin-top:18px;font:700 13px "Cairo";cursor:pointer;text-decoration:none}.hero-person{position:absolute;z-index:2;bottom:0;left:15%;height:95%;width:35%;display:flex;justify-content:center;align-items:end}.hero-person img{height:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 12px 35px #0009)}.section{padding:50px 5%}.section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:25px}.category-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:13px}.category-card{min-height:120px;background:#2b2229;border:1px solid var(--line);border-radius:11px;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;font-family:inherit;transition:0.2s}.category-card:hover{background:#33232b}.product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}.product-card{background:#241d23;border:1px solid var(--line);border-radius:11px;overflow:hidden}.product-image{height:200px;background:#f5f2f2;display:grid;place-items:center}.product-image img{width:100%;height:100%;object-fit:contain}.product-info{padding:14px}.product-info h3{font-size:13px;margin:4px 0 8px}.price{font-size:15px;font-weight:800}.add-cart{width:100%;border:1px solid #d23c55;border-radius:7px;background:#bd1d3b;color:white;padding:9px;margin-top:12px;font:700 11px "Cairo";cursor:pointer}.cart-drawer{position:fixed;z-index:50;top:0;bottom:0;left:0;width:min(400px,100%);background:#211a20;transform:translateX(-105%);transition:.3s;padding:22px;overflow:auto;border-right:1px solid var(--line)}.cart-drawer.open{transform:translateX(0)}.drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}.drawer-head button{background:none;border:1px solid var(--line);color:white;padding:6px 12px;border-radius:6px}.cart-items{padding:15px 0}.cart-line{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}.cart-total{display:flex;justify-content:space-between;padding:15px 0;font-size:16px}.checkout-form{display:grid;gap:10px}.checkout-form input,.checkout-form textarea{width:100%;background:#30262e;border:1px solid var(--line);border-radius:7px;padding:11px;color:white;font:12px "Cairo"}.scrim{display:none;position:fixed;inset:0;background:#000b;z-index:40}.scrim.show{display:block}@media(max-width:768px){.site-header{flex-wrap:wrap}.search{order:3;max-width:none;flex-basis:100%}nav{display:none}.hero-copy{width:100%}.hero-person{opacity:0.3;left:0;width:80%}.category-grid{grid-template-columns:repeat(3,1fr)}.product-grid{grid-template-columns:repeat(2,1fr)}}
+        *{box-sizing:border-box}:root{--bg:#171216;--red:#d92343;--text:#fbf7f8;--line:#ffffff18}body{margin:0;background:var(--bg);color:var(--text);font-family:"Cairo",sans-serif}
+        .announcement{height:34px;background:#100d10;color:#cfc3c8;display:flex;align-items:center;justify-content:center;gap:20px;font-size:10px}
+        .site-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:20px;padding:12px 5%;background:#191418ed;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}
+        .brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:white}
+        .brand-mark{width:43px;height:43px;display:grid;place-items:center;background:linear-gradient(145deg,#e63855,#a80d2c);border-radius:13px;font-size:25px;font-weight:900}
+        .brand b{display:block;font-size:20px}.brand small{display:block;color:#b8aeb3;font-size:9px}
+        .search{display:flex;flex:1;max-width:400px;background:#2a2229;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+        .search input{background:none;border:0;color:white;padding:11px 16px;width:100%;font:12px "Cairo"}
+        .search button{width:48px;border:0;background:var(--red);color:white;cursor:pointer}
+        .cart-button{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:9px;background:#2b2229;color:white;padding:8px 13px;cursor:pointer;font:600 12px "Cairo";margin-right:auto}
+        .cart-button b{background:var(--red);border-radius:20px;padding:0 7px;font-size:10px}
+        .hero{min-height:450px;position:relative;overflow:hidden;display:flex;align-items:center;padding:60px 8%;background:radial-gradient(ellipse at 75% 55%,#6e1c32 0,transparent 35%),linear-gradient(110deg,#21151d,#4b1728 54%,#21151d)}
+        .hero-copy{position:relative;z-index:4;width:60%}
+        .hero h1{font-size:clamp(40px,5vw,60px);line-height:1.2;margin:18px 0;color:white;font-weight:900}
+        .hero h1 em{font-style:normal;color:#ed9ba7}.hero p{color:#d7c9cf;max-width:430px;font-size:13px;line-height:1.8}
+        .primary-btn{display:inline-flex;align-items:center;gap:15px;background:linear-gradient(120deg,#e33a56,#b71636);border:0;border-radius:8px;color:white;padding:12px 23px;margin-top:18px;font:700 13px "Cairo";cursor:pointer;text-decoration:none}
+        .hero-person{position:absolute;z-index:2;bottom:0;left:15%;height:95%;width:35%;display:flex;justify-content:center;align-items:end}
+        .hero-person img{height:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 12px 35px #0009)}
+        .section{padding:50px 5%}.section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:25px}
+        
+        /* تنسيقات المنتجات ومعرض الصور */
+        .product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}
+        .product-card{background:#241d23;border:1px solid var(--line);border-radius:11px;overflow:hidden;display:flex;flex-direction:column}
+        .product-image-box{height:220px;background:#f5f2f2;display:grid;place-items:center;position:relative}
+        .product-image-box img{width:100%;height:100%;object-fit:contain}
+        .thumbnails{display:flex;gap:5px;padding:8px;background:#1a1519;overflow-x:auto;scrollbar-width:none}
+        .thumbnails img{width:40px;height:40px;object-fit:cover;border-radius:5px;cursor:pointer;border:2px solid transparent;transition:0.2s}
+        .thumbnails img:hover{border-color:var(--red)}
+        
+        .product-info{padding:14px;flex-grow:1;display:flex;flex-direction:column;justify-content:space-between}
+        .product-info h3{font-size:13px;margin:4px 0 8px}
+        .price{font-size:15px;font-weight:800}
+        .add-cart{width:100%;border:1px solid #d23c55;border-radius:7px;background:#bd1d3b;color:white;padding:9px;margin-top:12px;font:700 11px "Cairo";cursor:pointer}
+        
+        .cart-drawer{position:fixed;z-index:50;top:0;bottom:0;left:0;width:min(400px,100%);background:#211a20;transform:translateX(-105%);transition:.3s;padding:22px;overflow:auto;border-right:1px solid var(--line)}
+        .cart-drawer.open{transform:translateX(0)}
+        .drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+        .drawer-head button{background:none;border:1px solid var(--line);color:white;padding:6px 12px;border-radius:6px}
+        .cart-items{padding:15px 0}.cart-line{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}
+        .cart-total{display:flex;justify-content:space-between;padding:15px 0;font-size:16px}
+        .checkout-form{display:grid;gap:10px}
+        .checkout-form input,.checkout-form textarea{width:100%;background:#30262e;border:1px solid var(--line);border-radius:7px;padding:11px;color:white;font:12px "Cairo"}
+        .scrim{display:none;position:fixed;inset:0;background:#000b;z-index:40}.scrim.show{display:block}
+        
+        @media(max-width:768px){
+            .site-header{flex-wrap:wrap}.search{order:3;max-width:none;flex-basis:100%}
+            .hero-copy{width:100%}.hero-person{opacity:0.3;left:0;width:80%}
+            .product-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+            .product-image-box{height:160px}
+        }
     </style>
 </head>
 <body>
@@ -43,24 +92,59 @@
         </form>
     </div>
     <div class="scrim" id="scrim"></div>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script>
         const db = window.supabaseClient; let products=[], cart=JSON.parse(localStorage.getItem("cart")||"[]");
         const $ = s => document.querySelector(s); const money = n => new Intl.NumberFormat("ar-MR").format(n)+" أوقية";
+        
         function renderCart() {
             $("#cartCount").textContent = cart.reduce((a,x)=>a+x.qty,0);
             $("#cartItems").innerHTML = cart.map(x=>`<div class="cart-line"><span>${x.name} × ${x.qty}</span><b>${money(x.price*x.qty)}</b><button onclick="removeCart('${x.id}')">حذف</button></div>`).join("") || "<p>السلة فارغة</p>";
             $("#cartTotal").textContent = money(cart.reduce((a,x)=>a+x.price*x.qty,0));
             localStorage.setItem("cart", JSON.stringify(cart));
         }
+        
         window.removeCart = id => { cart = cart.filter(x=>x.id!==id); renderCart(); };
         window.addCart = id => { const p = products.find(x=>x.id===id); const item = cart.find(x=>x.id===id); if(item) item.qty++; else cart.push({id:p.id, name:p.name, price:p.price, qty:1}); renderCart(); alert("تمت الإضافة للسلة"); };
+        
+        // دالة لتغيير الصورة الرئيسية عند الضغط على صورة مصغرة
+        window.changeMainImg = (prodId, url) => {
+            document.getElementById(`main-img-${prodId}`).src = url;
+        };
+
         async function loadProducts() {
             const { data } = await db.from("products").select("*").eq("is_active", true).order("created_at", {ascending:false});
             products = data || [];
-            $("#productGrid").innerHTML = products.map(p=>`<div class="product-card"><div class="product-image">${p.image_url?`<img src="${p.image_url}">`:'لا توجد صورة'}</div><div class="product-info"><h3>${p.name}</h3><div class="price">${money(p.price)}</div><button class="add-cart" onclick="addCart('${p.id}')">أضف للسلة</button></div></div>`).join("") || "لا توجد منتجات.";
+            
+            $("#productGrid").innerHTML = products.map(p=>{
+                // التحقق من وجود مصفوفة صور أو صورة قديمة مفردة
+                let imgs = p.image_urls && p.image_urls.length > 0 ? p.image_urls : (p.image_url ? [p.image_url] : []);
+                let mainImg = imgs.length > 0 ? imgs[0] : null;
+                
+                return `
+                <div class="product-card">
+                    <div>
+                        <div class="product-image-box">
+                            ${mainImg ? `<img id="main-img-${p.id}" src="${mainImg}">` : 'لا توجد صورة'}
+                        </div>
+                        ${imgs.length > 1 ? `
+                        <div class="thumbnails">
+                            ${imgs.map(url => `<img src="${url}" onclick="changeMainImg('${p.id}', '${url}')">`).join('')}
+                        </div>` : ''}
+                    </div>
+                    <div class="product-info">
+                        <h3>${p.name}</h3>
+                        <div>
+                            <div class="price">${money(p.price)}</div>
+                            <button class="add-cart" onclick="addCart('${p.id}')">أضف للسلة</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join("") || "لا توجد منتجات.";
         }
+        
         $("#cartOpen").onclick = () => { $("#cartDrawer").classList.add("open"); $("#scrim").classList.add("show"); };
         $("#cartClose").onclick = () => { $("#cartDrawer").classList.remove("open"); $("#scrim").classList.remove("show"); };
         $("#checkoutForm").onsubmit = async e => {
@@ -70,6 +154,7 @@
             if(error) return alert(error.message);
             cart = []; renderCart(); e.target.reset(); alert("تم تسجيل طلبك بنجاح"); $("#cartClose").click();
         };
+        
         renderCart(); loadProducts();
     </script>
 </body>
