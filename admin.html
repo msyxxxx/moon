@@ -183,7 +183,8 @@
         function showAdmin(email) {
             $('adminBody').classList.remove('login-page');
             $('loginView').style.display = 'none';
-            $('adminView').style.display = 'flex';
+            // تم إصلاح هذا السطر هنا (إزالة flex واستبدالها بفراغ ليأخذ التصميم الطبيعي للجوال)
+            $('adminView').style.display = ''; 
             $('adminEmail').textContent = email;
             loadDashboard();
         }
