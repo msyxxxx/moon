@@ -6,37 +6,37 @@
     <title>لوحة التحكم | التوفيق</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        *{box-sizing:border-box}:root{--red:#cf2948;--bg:#171216;--panel:#241d23;--line:#ffffff18}body{margin:0;background:var(--bg);color:#f8f4f6;font-family:"Cairo",sans-serif}.admin-layout{display:block;min-height:100vh}@media(min-width:768px){.admin-layout{display:flex}}
+        *{box-sizing:border-box}:root{--red:#cf2948;--bg:#171216;--panel:#241d23;--line:#ffffff18}body{margin:0;background:var(--bg);color:#f8f4f6;font-family:"Cairo",sans-serif}
+        .admin-layout{display:block;min-height:100vh}@media(min-width:768px){.admin-layout{display:flex}}
         .sidebar{width:100%;background:#100d10;border-bottom:1px solid var(--line);padding:15px;display:flex;flex-wrap:wrap;gap:10px}@media(min-width:768px){.sidebar{width:240px;height:100vh;border-left:1px solid var(--line);border-bottom:0;flex-direction:column;position:sticky;top:0}}
-        .side-brand{width:100%;margin-bottom:10px}.side-brand b{font-size:22px;display:block}.sidebar a,.logout{padding:10px;border-radius:7px;color:#d0c6cb;text-decoration:none;font:600 12px "Cairo";background:transparent;border:0;cursor:pointer;text-align:right}
-        .sidebar a:hover,.sidebar a.selected{background:#cf294822;color:#f28b9d}.logout{color:#f28b9d;margin-top:auto}
+        .side-brand{width:100%;margin-bottom:10px;font-size:22px;font-weight:bold;color:white}
+        .sidebar a,.logout{padding:10px;border-radius:7px;color:#d0c6cb;text-decoration:none;font:600 12px "Cairo";background:transparent;border:0;cursor:pointer;text-align:right;display:block;width:100%}
+        .sidebar a:hover,.sidebar a.selected{background:#cf294822;color:#f28b9d}
+        .logout{color:#f28b9d;margin-top:auto}
         .admin-main{padding:20px;width:100%;max-width:1200px;margin:0 auto}
         .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;margin-bottom:20px}
         .admin-form{display:grid;gap:15px}@media(min-width:768px){.admin-form{grid-template-columns:1fr 1fr}}
         label{display:block;font-size:12px;color:#d6cdd1}input,select{display:block;width:100%;margin-top:5px;background:#30262e;border:1px solid var(--line);border-radius:7px;padding:10px;color:white;font:12px "Cairo"}
-        .btn{background:var(--red);color:white;border:0;border-radius:7px;padding:10px 15px;font:700 12px "Cairo";cursor:pointer}.btn.sec{background:#3a3038}
+        .btn{background:var(--red);color:white;border:0;border-radius:7px;padding:10px 15px;font:700 12px "Cairo";cursor:pointer;width:100%}.btn.sec{background:#3a3038}
         table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}th,td{text-align:right;padding:10px;border-bottom:1px solid var(--line)}
         .admin-section{display:none}.admin-section.active{display:block}
         .login-page{display:grid;place-items:center;min-height:100vh;background:#171216}.login-card{width:90%;max-width:400px;background:var(--panel);padding:30px;border-radius:12px;border:1px solid var(--line)}
-        #message{color:#f28b9d;font-size:12px;margin-top:10px}
+        #message{color:#f28b9d;font-size:12px;margin-top:10px;text-align:center}
     </style>
 </head>
 <body id="bodyEl" class="login-page">
-    
-    <!-- Login View -->
     <form class="login-card" id="loginForm">
-        <h2 style="text-align:center;color:white">لوحة إدارة التوفيق</h2>
+        <h2 style="text-align:center;color:white;margin-top:0">لوحة إدارة التوفيق</h2>
         <label>البريد الإلكتروني<input type="email" id="email" required></label>
         <label style="margin-top:10px">كلمة المرور<input type="password" id="password" required></label>
-        <button class="btn" style="width:100%;margin-top:20px">تسجيل الدخول</button>
+        <button class="btn" style="margin-top:20px">تسجيل الدخول</button>
         <div id="message"></div>
         <a href="index.html" style="display:block;text-align:center;margin-top:15px;color:#f28b9d;font-size:12px;text-decoration:none;">عودة للمتجر</a>
     </form>
 
-    <!-- Admin View -->
     <div class="admin-layout" id="adminView" style="display:none">
         <aside class="sidebar">
-            <div class="side-brand"><b>التوفيق</b></div>
+            <div class="side-brand">التوفيق</div>
             <a href="#" class="selected" onclick="nav('dash')">نظرة عامة</a>
             <a href="#" onclick="nav('prod')">المنتجات</a>
             <a href="#" onclick="nav('ord')">الطلبات</a>
@@ -59,15 +59,18 @@
                         <label>القسم<select id="p_category"><option>الإلكترونيات</option><option>الملابس</option><option>المنزل</option><option>أخرى</option></select></label>
                         <label>السعر<input id="p_price" type="number" required></label>
                         <label>الكمية<input id="p_stock" type="number" value="1"></label>
-                        <label>صورة المنتج (من المعرض)<input type="file" id="p_file" accept="image/*"></label>
+                        
+                        <!-- تم إضافة multiple لاختيار عدة صور -->
+                        <label>صور المنتج (يمكنك تحديد عدة صور)<input type="file" id="p_files" accept="image/*" multiple></label>
+                        
                         <label>نشر المنتج<select id="p_active"><option value="true">نعم</option><option value="false">لا</option></select></label>
                         <button class="btn" type="submit" style="grid-column:1/-1">حفظ المنتج</button>
-                        <div id="p_msg" style="grid-column:1/-1;color:#f28b9d;font-size:12px"></div>
+                        <div id="p_msg" style="grid-column:1/-1;color:#f28b9d;font-size:12px;text-align:center;margin-top:10px;"></div>
                     </form>
                 </div>
                 <div class="panel">
                     <h3>المنتجات الحالية</h3>
-                    <table><thead><tr><th>الاسم</th><th>السعر</th><th>الحالة</th><th>حذف</th></tr></thead><tbody id="prodList"></tbody></table>
+                    <table><thead><tr><th>الاسم</th><th>السعر</th><th>عدد الصور</th><th>الحالة</th><th>حذف</th></tr></thead><tbody id="prodList"></tbody></table>
                 </div>
             </section>
 
@@ -85,11 +88,10 @@
     <script>
         const db = window.supabaseClient;
         
-        // Check Auth
         db.auth.getSession().then(async ({data:{session}}) => {
             if(session) {
                 const {data} = await db.from('profiles').select('role').eq('id', session.user.id).single();
-                if(data?.role === 'admin') { showAdmin(); } else { alert("غير مصرح"); logout(); }
+                if(data?.role === 'admin') { showAdmin(); } else { logout(); }
             }
         });
 
@@ -106,44 +108,62 @@
         function showAdmin() { document.getElementById('bodyEl').className=""; document.getElementById('loginForm').style.display='none'; document.getElementById('adminView').style.display='flex'; loadData(); }
         function nav(id) { document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active')); document.getElementById('sec-'+id).classList.add('active'); }
 
-        // Load Data
         async function loadData() {
-            // Orders
             const {data: orders} = await db.from('orders').select('*').order('created_at', {ascending:false});
             document.getElementById('dashOrders').innerHTML = (orders||[]).slice(0,5).map(o=>`<tr><td>#${o.id.slice(0,6)}</td><td>${o.customer_name}</td><td>${o.phone}</td><td>${o.total}</td></tr>`).join("");
             document.getElementById('ordList').innerHTML = (orders||[]).map(o=>`<tr><td>${o.customer_name}</td><td>${o.city}</td><td>${o.total}</td><td>${o.status}</td></tr>`).join("");
             
-            // Products
             const {data: prods} = await db.from('products').select('*').order('created_at', {ascending:false});
-            document.getElementById('prodList').innerHTML = (prods||[]).map(p=>`<tr><td>${p.name}</td><td>${p.price}</td><td>${p.is_active?'نشط':'مخفي'}</td><td><button class="btn sec" onclick="delProd('${p.id}')">حذف</button></td></tr>`).join("");
+            document.getElementById('prodList').innerHTML = (prods||[]).map(p=>{
+                const imgCount = p.image_urls ? p.image_urls.length : (p.image_url ? 1 : 0);
+                return `<tr><td>${p.name}</td><td>${p.price}</td><td>${imgCount} صورة</td><td>${p.is_active?'نشط':'مخفي'}</td><td><button class="btn sec" onclick="delProd('${p.id}')">حذف</button></td></tr>`;
+            }).join("");
         }
 
-        // Add Product with Image Upload
         document.getElementById('productForm').onsubmit = async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button'); btn.innerText = "جارٍ الحفظ..."; btn.disabled = true;
-            let imgUrl = null;
-            const file = document.getElementById('p_file').files[0];
+            const msg = document.getElementById('p_msg');
+            msg.innerText = "";
+            let uploadedUrls = [];
             
-            if(file) {
-                document.getElementById('p_msg').innerText = "جارٍ رفع الصورة...";
-                const fileName = `${Date.now()}.${file.name.split('.').pop()}`;
-                const {error: upErr} = await db.storage.from('product-images').upload(fileName, file);
-                if(upErr) { document.getElementById('p_msg').innerText = "خطأ بالصورة: " + upErr.message; btn.innerText = "حفظ"; btn.disabled = false; return; }
-                imgUrl = db.storage.from('product-images').getPublicUrl(fileName).data.publicUrl;
+            const files = document.getElementById('p_files').files;
+            
+            // رفع جميع الصور المحددة
+            if(files.length > 0) {
+                msg.innerText = `جارٍ رفع ${files.length} صورة...`;
+                for(let i=0; i<files.length; i++) {
+                    const file = files[i];
+                    const fileName = `${Date.now()}_${i}.${file.name.split('.').pop()}`;
+                    const {error: upErr} = await db.storage.from('product-images').upload(fileName, file);
+                    if(upErr) { 
+                        msg.innerText = "خطأ برفع الصورة: " + upErr.message; 
+                        btn.innerText = "حفظ المنتج"; btn.disabled = false; 
+                        return; 
+                    }
+                    const url = db.storage.from('product-images').getPublicUrl(fileName).data.publicUrl;
+                    uploadedUrls.push(url);
+                }
             }
 
+            // حفظ المنتج مع مصفوفة الصور
             const {error} = await db.from('products').insert({
                 name: document.getElementById('p_name').value,
                 category: document.getElementById('p_category').value,
                 price: Number(document.getElementById('p_price').value),
                 stock: Number(document.getElementById('p_stock').value),
-                image_url: imgUrl,
+                image_urls: uploadedUrls, // حفظ المصفوفة هنا
                 is_active: document.getElementById('p_active').value === 'true'
             });
 
-            if(error) { document.getElementById('p_msg').innerText = error.message; } 
-            else { document.getElementById('p_msg').innerText = "تم الحفظ بنجاح!"; e.target.reset(); loadData(); }
+            if(error) { 
+                msg.innerText = "خطأ: " + error.message; 
+            } else { 
+                msg.innerText = "تم الحفظ بنجاح!"; 
+                msg.style.color = "#4ade80"; 
+                e.target.reset(); 
+                loadData(); 
+            }
             btn.innerText = "حفظ المنتج"; btn.disabled = false;
         };
 
