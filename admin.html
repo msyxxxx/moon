@@ -10,6 +10,9 @@
         *{box-sizing:border-box}:root{--red:#cf2948;--bg:#171216;--panel:#241d23;--muted:#b8adb3;--line:#ffffff18}body{margin:0;background:#171216;color:#f8f4f6;font-family:"Cairo",sans-serif}.admin-layout{min-height:100vh;display:flex}.sidebar{width:245px;background:#100d10;border-left:1px solid var(--line);padding:25px 16px;display:flex;flex-direction:column;gap:7px;flex-shrink:0}.side-brand{padding:5px 12px 25px;border-bottom:1px solid var(--line);margin-bottom:10px}.side-brand b{display:block;font-size:25px}.side-brand small{color:#a99da4;font-size:11px}.sidebar a,.logout{padding:12px 14px;border-radius:7px;text-decoration:none;color:#d0c6cb;font:600 12px "Cairo";text-align:right;background:transparent;border:0;cursor:pointer}.sidebar a:hover,.sidebar a.selected{background:#cf294822;color:#f28b9d;border-right:2px solid #d33b57}.logout{margin-top:auto;color:#f28b9d;border-top:1px solid var(--line);border-radius:0;padding-top:18px}.admin-main{padding:32px;width:100%;max-width:1450px;margin:auto}.admin-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:25px}.admin-top small{color:#e28a99;font-size:11px}.admin-top h1{font-size:27px;margin:2px 0}.admin-top span{color:#aaa;font-size:12px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}.stats article,.panel{background:#241d23;border:1px solid var(--line);border-radius:10px;padding:20px}.stats small,.stats span{display:block;color:#b8adb3;font-size:11px}.stats b{display:block;font-size:32px;margin:8px 0;color:white}.panel{margin-bottom:18px}.panel h2{font-size:16px;margin:0 0 17px}.panel-head{display:flex;justify-content:space-between;align-items:center}.panel-head a{color:#ed91a0;text-decoration:none;font-size:11px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px;font-size:11px}th,td{text-align:right;padding:12px 10px;border-bottom:1px solid var(--line)}th{color:#e68a9a;font-weight:700}td{color:#e2d9de}.status{background:#cf294822;color:#f28b9d;padding:4px 8px;border-radius:20px}.btn{display:inline-block;background:var(--red);color:white;text-decoration:none;border:0;border-radius:7px;padding:10px 18px;font:700 12px "Cairo";cursor:pointer;margin:4px}.btn.secondary{background:#3a3038;color:#eee}.quick{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.quick h2{width:100%;margin-bottom:3px}.login-page{min-height:100vh;display:grid;place-items:center;background:radial-gradient(circle at 20% 20%,#5c1b30,#171216 55%)}.login-card{width:min(420px,92%);padding:32px;background:#241d23;border:1px solid #ffffff20;border-radius:12px;box-shadow:0 25px 80px #0008}.admin-logo{width:55px;height:55px;border-radius:12px;background:var(--red);display:grid;place-items:center;font-size:30px;font-weight:900}.login-card h1{font-size:22px;margin-bottom:0}.login-card p{color:#b8adb3;font-size:12px;margin-top:5px}.login-card label,.admin-form label{display:block;font-size:12px;color:#d6cdd1;margin:13px 0}.login-card input,.admin-form input,.admin-form select,.admin-main select{display:block;width:100%;margin-top:6px;background:#30262e;border:1px solid #ffffff20;border-radius:7px;padding:11px;color:white;font:12px "Cairo"}.login-card .btn{width:100%;margin:12px 0}.login-card>a{display:block;text-align:center;color:#ed91a0;font-size:12px;text-decoration:none}.message{color:#f28b9d;font-size:12px}.admin-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 15px}.admin-form .check{display:flex;align-items:center;gap:8px}.admin-form .check input{width:auto}.admin-form button,.admin-form .message{grid-column:1/-1}.table-btn{background:#40343d;color:#fff;border:0;border-radius:5px;padding:5px 9px;cursor:pointer;font:11px "Cairo"}.table-btn.danger{background:#741f32}.admin-main p{color:#c0b6bb;font-size:12px;line-height:1.9}.admin-main code{color:#f28b9d}@media(max-width:760px){.admin-layout{display:block}.sidebar{width:100%;padding:12px;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center}.side-brand{width:100%;padding:0 8px 8px}.sidebar a,.logout{font-size:10px;padding:8px}.logout{margin:0}.admin-main{padding:18px 12px}.stats{grid-template-columns:1fr}.admin-form{grid-template-columns:1fr}.admin-top h1{font-size:22px}}
         .admin-section { display: none; }
         .admin-section.active { display: block; }
+        
+        /* تنسيق خاص لزر رفع الملفات */
+        input[type="file"] { cursor: pointer; }
     </style>
 </head>
 <body class="login-page" id="adminBody">
@@ -76,7 +79,12 @@
                         <label>السعر بالأوقية<input id="p_price" type="number" min="0" required></label>
                         <label>الكمية<input id="p_stock" type="number" min="0" value="0"></label>
                         <label>الباركود<input id="p_barcode"></label>
-                        <label>رابط صورة المنتج<input id="p_image" type="url" placeholder="https://..."></label>
+                        
+                        <!-- الحقل الجديد: رفع الصورة من المعرض -->
+                        <label>صورة المنتج (من المعرض)<input type="file" id="p_image_file" accept="image/*"></label>
+                        <!-- حقل الرابط كبديل -->
+                        <label>أو رابط الصورة (اختياري)<input id="p_image" type="url" placeholder="https://..."></label>
+                        
                         <label class="check"><input id="p_active" type="checkbox" checked> نشر المنتج في المتجر</label>
                         <button class="btn" type="submit">حفظ المنتج</button>
                         <button type="button" class="btn secondary" id="resetBtn">إلغاء التعديل</button>
@@ -183,7 +191,6 @@
         function showAdmin(email) {
             $('adminBody').classList.remove('login-page');
             $('loginView').style.display = 'none';
-            // تم إصلاح هذا السطر هنا (إزالة flex واستبدالها بفراغ ليأخذ التصميم الطبيعي للجوال)
             $('adminView').style.display = ''; 
             $('adminEmail').textContent = email;
             loadDashboard();
@@ -233,21 +240,57 @@
             ).join("") || "<tr><td colspan='6'>لا توجد منتجات.</td></tr>";
         }
 
+        // حفظ المنتج (مع رفع الصورة)
         $('productForm').onsubmit = async e => {
             e.preventDefault();
             const id = $('productId').value;
+            const fileInput = $('p_image_file');
+            let imageUrl = $('p_image').value.trim() || null; // يأخذ الرابط كبداية
+
+            // إذا تم اختيار صورة من الجهاز
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${fileExt}`;
+                
+                $('productMessage').textContent = "جارٍ رفع الصورة...";
+                
+                // رفع الصورة إلى Supabase Storage
+                const { data: uploadData, error: uploadError } = await db.storage
+                    .from('product-images')
+                    .upload(fileName, file);
+
+                if (uploadError) {
+                    $('productMessage').textContent = "خطأ في رفع الصورة: " + uploadError.message;
+                    return;
+                }
+
+                // الحصول على الرابط العام للصورة
+                const { data: { publicUrl } } = db.storage
+                    .from('product-images')
+                    .getPublicUrl(fileName);
+                
+                imageUrl = publicUrl;
+            }
+
             const row = {
                 name: $('p_name').value.trim(),
                 category: $('p_category').value,
                 price: Number($('p_price').value),
                 stock: Number($('p_stock').value),
                 barcode: $('p_barcode').value.trim() || null,
-                image_url: $('p_image').value.trim() || null,
+                image_url: imageUrl, // استخدام الرابط المرفوع أو المكتوب
                 is_active: $('p_active').checked
             };
+            
             const q = id ? db.from("products").update(row).eq("id", id) : db.from("products").insert(row);
             const {error} = await q;
-            if(error) { $('productMessage').textContent = error.message; return; }
+            
+            if(error) { 
+                $('productMessage').textContent = error.message; 
+                return; 
+            }
+            
             $('productMessage').textContent = "تم حفظ المنتج بنجاح.";
             resetProductForm();
             loadProducts();
@@ -258,6 +301,8 @@
             $('productId').value = "";
             $('formTitle').textContent = "إضافة منتج جديد";
             $('p_active').checked = true;
+            $('productMessage').textContent = ""; // مسح الرسالة
+            $('p_image_file').value = ""; // مسح الملف المختار
         }
         $('resetBtn').onclick = resetProductForm;
 
@@ -270,9 +315,11 @@
                 $('p_price').value = p.price;
                 $('p_stock').value = p.stock;
                 $('p_barcode').value = p.barcode || '';
-                $('p_image').value = p.image_url || '';
+                $('p_image').value = p.image_url || ''; // عرض الرابط الحالي
+                $('p_image_file').value = ''; // تصفير حقل الملف
                 $('p_active').checked = p.is_active;
                 $('formTitle').textContent = "تعديل المنتج";
+                $('productMessage').textContent = "";
             }
             if(e.target.dataset.del && confirm("هل تريد حذف هذا المنتج؟")) {
                 const {error} = await db.from("products").delete().eq("id", e.target.dataset.del);
