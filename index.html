@@ -40,14 +40,18 @@
         .cart-button:hover { border-color: var(--primary); background: var(--surface-hover); }
         .cart-button b { background: var(--primary); border-radius: 20px; padding: 2px 8px; font-size: 11px; }
 
-        /* --- Hero Section --- */
-        .hero { position: relative; overflow: hidden; display: flex; align-items: center; padding: 80px 5%; background: radial-gradient(circle at 80% 50%, #3a111c 0%, var(--bg) 70%); min-height: 400px; }
-        .hero-content { position: relative; z-index: 2; width: 60%; }
+        /* --- Hero Section (صورتك) --- */
+        .hero { position: relative; overflow: hidden; display: flex; align-items: center; padding: 80px 5%; background: radial-gradient(circle at 80% 50%, #3a111c 0%, var(--bg) 70%); min-height: 500px; }
+        .hero-content { position: relative; z-index: 2; width: 55%; }
         .hero h1 { font-family: "Alexandria", sans-serif; font-size: clamp(36px, 5vw, 56px); line-height: 1.2; margin-bottom: 20px; font-weight: 800; }
         .hero h1 em { font-style: normal; background: linear-gradient(120deg, var(--primary), #ff7b95); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p { color: var(--text-muted); max-width: 450px; font-size: 15px; line-height: 1.8; margin-bottom: 30px; }
-        .primary-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--primary), #b01530); border: 0; border-radius: 10px; color: white; padding: 15px 30px; font: 700 14px "Cairo"; cursor: pointer; box-shadow: 0 10px 30px rgba(217, 35, 67, 0.3); transition: 0.3s; width: 100%;}
+        .primary-btn { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, var(--primary), #b01530); border: 0; border-radius: 10px; color: white; padding: 15px 30px; font: 700 14px "Cairo"; cursor: pointer; box-shadow: 0 10px 30px rgba(217, 35, 67, 0.3); transition: 0.3s; width: auto;}
         .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(217, 35, 67, 0.5); }
+        
+        .hero-image-container { position: absolute; left: 5%; bottom: 0; width: 40%; height: 90%; z-index: 1; display: flex; justify-content: center; align-items: flex-end; }
+        .hero-image-container::before { content: ''; position: absolute; width: 80%; height: 80%; background: var(--primary); filter: blur(100px); opacity: 0.3; border-radius: 50%; bottom: 10%; left: 10%; z-index: -1; }
+        .hero-image-container img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)); }
 
         /* --- Trust Badges --- */
         .trust-badges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 25px 5%; background: var(--surface); border-bottom: 1px solid var(--border); border-top: 1px solid var(--border); }
@@ -56,46 +60,34 @@
         .badge-text b { display: block; font-size: 13px; }
         .badge-text small { color: var(--text-muted); font-size: 11px; }
 
-        /* --- Owner Section --- */
-        .owner-section { padding: 80px 5%; display: flex; align-items: center; gap: 50px; background: linear-gradient(to left, var(--bg), var(--surface)); }
-        .owner-image-wrapper { flex: 1; position: relative; display: flex; justify-content: center; }
-        .owner-image-wrapper::before { content: ''; position: absolute; width: 100%; height: 100%; background: var(--primary); border-radius: 30px; transform: rotate(3deg); z-index: 0; opacity: 0.8; }
-        .owner-image { width: 100%; max-width: 400px; border-radius: 30px; position: relative; z-index: 1; box-shadow: 0 20px 50px rgba(0,0,0,0.5); object-fit: cover; border: 4px solid var(--surface); }
-        .owner-content { flex: 1; }
-        .owner-content h2 { font-family: "Alexandria"; font-size: 32px; margin-bottom: 15px; }
-        .owner-content p { color: var(--text-muted); font-size: 16px; line-height: 1.8; margin-bottom: 20px; }
-        .signature { font-family: "Alexandria"; font-size: 24px; color: var(--gold); font-weight: 700; }
-
         /* --- Categories --- */
         .section { padding: 60px 5%; }
-        .section-title { text-align: center; margin-bottom: 40px; }
+        .section-title { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; }
         .section-title h2 { font-family: "Alexandria"; font-size: 28px; }
-        .section-title p { color: var(--text-muted); margin-top: 10px; }
-        .category-grid { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; justify-content: center; flex-wrap: wrap; }
-        .cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px 30px; text-align: center; min-width: 140px; cursor: pointer; transition: 0.3s; }
-        .cat-card:hover { transform: translateY(-5px); border-color: var(--primary); background: var(--surface-hover); }
-        .cat-card .icon { font-size: 30px; margin-bottom: 10px; display: block; }
-        .cat-card b { font-size: 14px; }
+        .category-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
+        .cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px 25px; text-align: center; min-width: 120px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .cat-card:hover, .cat-card.active { transform: translateY(-5px); border-color: var(--primary); background: var(--surface-hover); }
+        .cat-card .icon { font-size: 24px; }
+        .cat-card b { font-size: 13px; }
 
         /* --- Product Grid --- */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-        .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; height: 100%; }
-        .product-card:hover { transform: translateY(-5px); border-color: rgba(217, 35, 67, 0.4); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
-        
-        .product-image-box { height: 220px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 15px; position: relative; width: 100%; }
+        .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
+        .product-card:hover { transform: translateY(-8px); border-color: rgba(217, 35, 67, 0.4); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        .product-image-box { height: 220px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 15px; position: relative; }
         .product-image-box img { width: 100%; height: 100%; object-fit: contain; transition: 0.3s; }
-        .product-card:hover .product-image-box img { transform: scale(1.05); }
+        .product-card:hover .product-image-box img { transform: scale(1.08); }
+        .badge-tag { position: absolute; top: 10px; right: 10px; background: var(--primary); color: white; font-size: 10px; padding: 4px 8px; border-radius: 20px; font-weight: bold; }
         
-        .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; text-align: right; }
-        .category-tag { color: var(--text-muted); font-size: 11px; margin-bottom: 5px; display: block; }
-        .product-info h3 { font-size: 15px; line-height: 1.4; margin-bottom: 15px; font-weight: 700; color: white; }
-        .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .price { font-size: 18px; font-weight: 800; color: var(--gold); }
+        .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .category-tag { color: var(--text-muted); font-size: 11px; margin-bottom: 5px; }
+        .product-info h3 { font-size: 15px; line-height: 1.4; margin-bottom: 15px; font-weight: 700; }
+        .price { font-size: 18px; font-weight: 800; color: var(--gold); margin-bottom: 15px; }
         .add-cart { width: 100%; border: 1px solid var(--primary); border-radius: 8px; background: transparent; color: var(--primary); padding: 10px; font: 700 13px "Cairo"; cursor: pointer; transition: 0.3s; }
         .add-cart:hover { background: var(--primary); color: white; }
 
         /* --- Cart Drawer --- */
-        .cart-drawer { position: fixed; z-index: 200; top: 0; bottom: 0; left: 0; width: min(420px, 100%); background: var(--surface); transform: translateX(-105%); transition: 0.3s ease-in-out; padding: 25px; overflow-y: auto; border-right: 1px solid var(--border); box-shadow: 10px 0 50px rgba(0,0,0,0.5); }
+        .cart-drawer { position: fixed; z-index: 200; top: 0; bottom: 0; left: 0; width: min(400px, 100%); background: var(--surface); transform: translateX(-105%); transition: 0.3s ease-in-out; padding: 25px; overflow-y: auto; border-right: 1px solid var(--border); box-shadow: 10px 0 50px rgba(0,0,0,0.5); }
         .cart-drawer.open { transform: translateX(0); }
         .drawer-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
         .drawer-head button { background: var(--surface-hover); border: 0; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
@@ -109,54 +101,40 @@
         .scrim.show { display: block; }
 
         /* --- Footer --- */
-        footer { background: #080608; padding: 60px 5% 20px; border-top: 1px solid var(--border); }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
-        .footer-col h3 { font-family: "Alexandria"; font-size: 18px; margin-bottom: 20px; color: white; }
-        .footer-col p { color: var(--text-muted); font-size: 13px; line-height: 1.8; }
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 12px; }
-        .footer-col ul a { color: var(--text-muted); font-size: 13px; transition: 0.3s; }
-        .footer-col ul a:hover { color: var(--primary); padding-right: 5px; }
-        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 12px; }
+        footer { background: #080608; padding: 40px 5% 20px; border-top: 1px solid var(--border); text-align: center; }
+        footer .brand { justify-content: center; margin-bottom: 15px; }
+        footer p { color: var(--text-muted); font-size: 13px; margin-bottom: 10px; }
 
-        /* --- Responsive --- */
-        @media(max-width: 992px) {
-            .owner-section { flex-direction: column; text-align: center; padding: 50px 5%; }
-            .owner-image-wrapper::before { display: none; }
-            .hero-content { width: 100%; text-align: center; }
+        @media(max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; padding: 50px 5%; min-height: auto; }
+            .hero-content { width: 100%; }
             .hero p { margin: 0 auto 30px; }
+            .hero-image-container { position: relative; width: 100%; height: 350px; left: 0; margin-top: 30px; }
         }
         @media(max-width: 768px) {
-            .site-header { flex-wrap: wrap; padding: 10px 5%; gap: 10px; }
+            .site-header { flex-wrap: wrap; }
             .search-box { order: 3; max-width: none; flex-basis: 100%; }
             .trust-badges { grid-template-columns: repeat(2, 1fr); }
             .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .product-image-box { height: 160px; padding: 10px; }
-            .product-info { padding: 12px; }
-            .product-info h3 { font-size: 12px; }
-            .price { font-size: 15px; }
-            .category-grid { justify-content: flex-start; flex-wrap: nowrap; }
+            .product-image-box { height: 160px; }
+            .section-title h2 { font-size: 22px; }
         }
     </style>
 </head>
 <body>
-    <!-- شريط الإعلانات -->
     <div class="announcement">
         <span>🚚 توصيل سريع لجميع الولايات</span>
         <span>|</span>
         <span>💵 الدفع عند الاستلام</span>
-        <span>|</span>
-        <span>✨ جودة مضمونة 100%</span>
     </div>
 
-    <!-- الهيدر -->
     <header class="site-header">
-        <a class="brand" href="index.html">
+        <a href="index.html" class="brand">
             <span class="brand-mark">ت</span>
             <div class="brand-text"><b>التوفيق</b><small>متجرك الشامل</small></div>
         </a>
         <form class="search-box" id="searchForm">
-            <input id="searchInput" placeholder="ابحث عن منتج، ماركة، أو قسم...">
+            <input id="searchInput" placeholder="ابحث عن منتج...">
             <button type="submit">🔍</button>
         </form>
         <div class="header-actions">
@@ -167,16 +145,18 @@
     </header>
 
     <main>
-        <!-- قسم الترحيب -->
         <section class="hero">
             <div class="hero-content">
-                <h1>كل ما تحتاجه<br><em>في مكان واحد</em></h1>
-                <p>اكتشف تشكيلة واسعة من أفضل المنتجات العالمية والمحلية. جودة عالية، أسعار منافسة، وتجربة تسوق لا مثيل لها.</p>
-                <a class="primary-btn" href="#products" style="width:auto;">تسوق الآن <span>←</span></a>
+                <h1>اختيارك الذكي<br><em>يبدأ من هنا</em></h1>
+                <p>مرحباً بكم في متجر التوفيق. نقدم لكم تشكيلة واسعة من أفضل المنتجات العالمية بجودة عالية وأسعار تنافسية، مع ضمان راحتكم وثقتكم.</p>
+                <a class="primary-btn" href="#products">اكتشف منتجاتنا <span>←</span></a>
+            </div>
+            <div class="hero-image-container">
+                <!-- صورتك هنا -->
+                <img src="owner.jpg" alt="مؤسس متجر التوفيق">
             </div>
         </section>
 
-        <!-- شريط الميزات -->
         <section class="trust-badges">
             <div class="badge-item"><span class="badge-icon">🚚</span><div class="badge-text"><b>توصيل سريع</b><small>خلال 24-48 ساعة</small></div></div>
             <div class="badge-item"><span class="badge-icon">🛡️</span><div class="badge-text"><b>ضمان الجودة</b><small>منتجات أصلية 100%</small></div></div>
@@ -184,78 +164,35 @@
             <div class="badge-item"><span class="badge-icon">🎧</span><div class="badge-text"><b>دعم فني</b><small>خدمة عملاء متميزة</small></div></div>
         </section>
 
-        <!-- قسم المالك (صورتك بوضوح) -->
-        <section class="owner-section">
-            <div class="owner-image-wrapper">
-                <!-- تأكد من وجود صورتك في نفس المجلد باسم owner.jpg -->
-                <img src="owner.jpg" alt="مؤسس متجر التوفيق" class="owner-image">
-            </div>
-            <div class="owner-content">
-                <h2>قصتنا مع <span style="color:var(--primary)">التوفيق</span></h2>
-                <p>مرحباً بكم في متجر التوفيق. أردت أن أخلق مساحة تسوق تجمع بين الجودة العالية والأسعار المناسبة، مع التركيز على راحة وثقة العميل الموريتاني.</p>
-                <p>نحن نختار كل منتج بعناية لضمان حصولك على الأفضل. رضاكم هو هدفنا الأول ونجاحنا الحقيقي.</p>
-                <div class="signature">- إدارة متجر التوفيق</div>
-            </div>
-        </section>
-
-        <!-- الأقسام -->
-        <section class="section" style="padding-bottom: 0;">
-            <div class="section-title">
-                <h2>تسوق حسب القسم</h2>
-                <p>اختر القسم الذي يناسبك لتصفح منتجاتنا</p>
-            </div>
+        <section class="section">
+            <div class="section-title"><h2>تسوق حسب القسم</h2></div>
             <div class="category-grid">
-                <div class="cat-card" onclick="filterCategory('الكل')"><span class="icon">🏠</span><b>الكل</b></div>
-                <div class="cat-card" onclick="filterCategory('الإلكترونيات')"><span class="icon">📱</span><b>إلكترونيات</b></div>
-                <div class="cat-card" onclick="filterCategory('المنزل')"><span class="icon">🛋️</span><b>المنزل</b></div>
-                <div class="cat-card" onclick="filterCategory('الجمال')"><span class="icon">🧴</span><b>الجمال</b></div>
-                <div class="cat-card" onclick="filterCategory('الملابس')"><span class="icon">👕</span><b>ملابس</b></div>
+                <div class="cat-card active" onclick="filterCategory('الكل', this)"><span class="icon">🏠</span><b>الكل</b></div>
+                <div class="cat-card" onclick="filterCategory('الإلكترونيات', this)"><span class="icon">📱</span><b>إلكترونيات</b></div>
+                <div class="cat-card" onclick="filterCategory('المنزل', this)"><span class="icon">🛋️</span><b>المنزل</b></div>
+                <div class="cat-card" onclick="filterCategory('الجمال', this)"><span class="icon">🧴</span><b>الجمال</b></div>
+                <div class="cat-card" onclick="filterCategory('الملابس', this)"><span class="icon">👕</span><b>ملابس</b></div>
             </div>
         </section>
 
-        <!-- المنتجات -->
-        <section class="section" id="products">
+        <section class="section" id="products" style="padding-top: 0;">
             <div class="section-title">
                 <h2>منتجاتنا المميزة</h2>
-                <p>أفضل ما اخترناه لك من عروض</p>
+                <span id="productCount" style="color: var(--text-muted); font-size: 13px;"></span>
             </div>
-            <div class="product-grid" id="productGrid">
-                <!-- سيتم تحميل المنتجات هنا ديناميكياً -->
-            </div>
+            <div class="product-grid" id="productGrid"></div>
         </section>
     </main>
 
-    <!-- التذييل (Footer) -->
     <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <div class="brand" style="margin-bottom:15px;"><span class="brand-mark">ت</span><div class="brand-text"><b>التوفيق</b></div></div>
-                <p>وجهتك الأولى للتسوق الإلكتروني الموثوق. نوفر لك أفضل المنتجات بأعلى جودة وأفضل الأسعار.</p>
-            </div>
-            <div class="footer-col">
-                <h3>روابط سريعة</h3>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="#products">المنتجات</a></li>
-                    <li><a href="#">من نحن</a></li>
-                    <li><a href="#">سياسة الإرجاع</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h3>تواصل معنا</h3>
-                <ul>
-                    <li><a href="#">📞 +222 XX XX XX XX</a></li>
-                    <li><a href="#">✉️ info@altaoufik.com</a></li>
-                    <li><a href="#">📍 نواكشوط، موريتانيا</a></li>
-                </ul>
-            </div>
+        <div class="brand">
+            <span class="brand-mark">ت</span>
+            <div class="brand-text"><b>التوفيق</b></div>
         </div>
-        <div class="footer-bottom">
-            © 2024 متجر التوفيق. جميع الحقوق محفوظة.
-        </div>
+        <p>وجهتك الأولى للتسوق الإلكتروني الموثوق في موريتانيا.</p>
+        <small>© 2024 متجر التوفيق. جميع الحقوق محفوظة.</small>
     </footer>
 
-    <!-- سلة التسوق -->
     <div class="cart-drawer" id="cartDrawer">
         <div class="drawer-head">
             <h3>سلة التسوق</h3>
@@ -268,32 +205,25 @@
             <input name="phone" placeholder="رقم الهاتف" required>
             <input name="city" placeholder="المدينة / الولاية" required>
             <textarea name="address" placeholder="العنوان بالتفصيل"></textarea>
-            <button class="primary-btn" style="width:100%;">تأكيد الطلب</button>
+            <button class="primary-btn" style="width:100%; justify-content:center;">تأكيد الطلب</button>
         </form>
     </div>
     <div class="scrim" id="scrim"></div>
 
-    <!-- السكربتات -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script>
         const db = window.supabaseClient;
-        let globalProducts = []; 
+        let globalProducts = [];
         let cart = JSON.parse(localStorage.getItem("taoufik_cart") || "[]");
 
-        // بيانات المنتجات التجريبية (من أمازون) في حال كانت قاعدة البيانات فارغة
+        // بيانات افتراضية إذا كانت القاعدة فارغة
         const seedProducts = [
-            { id: "amz-1", name: "Samsung Galaxy S26 Ultra 256GB", category: "الإلكترونيات", price: 45000, image_urls: ["https://m.media-amazon.com/images/I/71Zt2Xp5lXL._AC_SL1500_.jpg"] },
-            { id: "amz-2", name: "Sony WH-1000XM5 سماعات لاسلكية", category: "الإلكترونيات", price: 12500, image_urls: ["https://m.media-amazon.com/images/I/51aXv6n5jOL._AC_SL1500_.jpg"] },
-            { id: "amz-3", name: "منظف متعدد الأغراض Grove Co.", category: "المنزل", price: 1200, image_urls: ["https://m.media-amazon.com/images/I/61S3V4gJhOL._AC_SL1500_.jpg"] },
-            { id: "amz-4", name: "Burt's Bees مجموعة العناية اليومية", category: "الجمال", price: 1800, image_urls: ["https://m.media-amazon.com/images/I/71oJ5n5jXOL._AC_SL1500_.jpg"] },
-            { id: "amz-5", name: "True Classic قمصان رجالية (3 قطع)", category: "الملابس", price: 3500, image_urls: ["https://m.media-amazon.com/images/I/71vX5g5jXOL._AC_SL1500_.jpg"] },
-            { id: "amz-6", name: "بخاخ ماء الورد العضوي للوجه", category: "الجمال", price: 900, image_urls: ["https://m.media-amazon.com/images/I/61rT5g5jXOL._AC_SL1500_.jpg"] },
-            { id: "amz-7", name: "Samsung Galaxy Watch Ultra2", category: "الإلكترونيات", price: 15000, image_urls: ["https://m.media-amazon.com/images/I/61kS5g5jXOL._AC_SL1500_.jpg"] },
-            { id: "amz-8", name: "سترة رسمية كلاسيكية للرجال", category: "الملابس", price: 4200, image_urls: ["https://m.media-amazon.com/images/I/71wS5g5jXOL._AC_SL1500_.jpg"] }
+            { id: "amz-1", name: "Samsung Galaxy S26 Ultra", category: "الإلكترونيات", price: 45000, image_urls: ["https://m.media-amazon.com/images/I/71Zt2Xp5lXL._AC_SL1500_.jpg"] },
+            { id: "amz-2", name: "Sony WH-1000XM5", category: "الإلكترونيات", price: 12500, image_urls: ["https://m.media-amazon.com/images/I/51aXv6n5jOL._AC_SL1500_.jpg"] },
+            { id: "amz-4", name: "Burt's Bees مجموعة العناية", category: "الجمال", price: 1800, image_urls: ["https://m.media-amazon.com/images/I/71oJ5n5jXOL._AC_SL1500_.jpg"] }
         ];
 
-        // تحميل المنتجات من قاعدة البيانات أو استخدام البيانات التجريبية
         async function loadProducts() {
             if (db) {
                 const { data } = await db.from("products").select("*").eq("is_active", true).order("created_at", { ascending: false });
@@ -308,9 +238,10 @@
             renderProducts(globalProducts);
         }
 
-        // عرض المنتجات في الصفحة
         function renderProducts(productsToRender) {
             const grid = document.getElementById("productGrid");
+            document.getElementById("productCount").innerText = `${productsToRender.length} منتج متوفر`;
+            
             if(productsToRender.length === 0) {
                 grid.innerHTML = "<p style='text-align:center; grid-column: 1/-1; padding:50px; color:#888;'>لا توجد منتجات في هذا القسم حالياً.</p>";
                 return;
@@ -325,12 +256,10 @@
                         ${mainImg ? `<img src="${mainImg}" alt="${p.name}" loading="lazy">` : '<span>لا توجد صورة</span>'}
                     </div>
                     <div class="product-info">
+                        <span class="category-tag">${p.category || 'عام'}</span>
+                        <h3>${p.name}</h3>
                         <div>
-                            <span class="category-tag">${p.category || 'عام'}</span>
-                            <h3>${p.name}</h3>
-                        </div>
-                        <div>
-                            <div class="price-row"><div class="price">${money(p.price)}</div></div>
+                            <div class="price">${money(p.price)}</div>
                             <button class="add-cart" onclick="addToCart('${p.id}')">أضف إلى السلة</button>
                         </div>
                     </div>
@@ -338,16 +267,13 @@
             }).join("");
         }
 
-        // فلترة الأقسام
-        window.filterCategory = (cat) => {
-            if (cat === 'الكل') {
-                renderProducts(globalProducts);
-            } else {
-                renderProducts(globalProducts.filter(p => p.category === cat));
-            }
+        window.filterCategory = (cat, el) => {
+            document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            if (cat === 'الكل') renderProducts(globalProducts);
+            else renderProducts(globalProducts.filter(p => p.category === cat));
         };
 
-        // البحث
         document.getElementById("searchForm").onsubmit = (e) => {
             e.preventDefault();
             const query = document.getElementById("searchInput").value.trim().toLowerCase();
@@ -355,7 +281,6 @@
             renderProducts(globalProducts.filter(p => p.name.toLowerCase().includes(query) || (p.category && p.category.toLowerCase().includes(query))));
         };
 
-        // إدارة السلة
         function money(n) { return new Intl.NumberFormat("ar-MR").format(n) + " أوقية"; }
 
         window.addToCart = (id) => {
@@ -365,18 +290,14 @@
             if (item) item.qty++;
             else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
             renderCart();
-            
-            // تأثير بصري عند الإضافة
             const btn = event.target;
             btn.innerText = "تمت الإضافة ✓";
             btn.style.background = "var(--success)";
             btn.style.color = "white";
-            btn.style.borderColor = "var(--success)";
             setTimeout(() => {
                 btn.innerText = "أضف إلى السلة";
                 btn.style.background = "transparent";
                 btn.style.color = "var(--primary)";
-                btn.style.borderColor = "var(--primary)";
             }, 1500);
         };
 
@@ -393,12 +314,11 @@
                     <b>${money(x.price * x.qty)}</b>
                     <button onclick="removeFromCart('${x.id}')">حذف</button>
                 </div>
-            `).join("") || "<p style='text-align:center;color:#888; padding: 20px 0;'>السلة فارغة حالياً</p>";
+            `).join("") || "<p style='text-align:center;color:#888; padding: 20px 0;'>السلة فارغة</p>";
             document.getElementById("cartTotal").textContent = money(cart.reduce((a, x) => a + x.price * x.qty, 0));
             localStorage.setItem("taoufik_cart", JSON.stringify(cart));
         }
 
-        // التحكم بالسلة
         document.getElementById("cartOpen").onclick = () => {
             document.getElementById("cartDrawer").classList.add("open");
             document.getElementById("scrim").classList.add("show");
@@ -410,10 +330,9 @@
             document.getElementById("scrim").classList.remove("show");
         }
 
-        // إتمام الطلب باستخدام دالة RPC (تتجاوز مشكلة الـ Schema Cache نهائياً)
         document.getElementById("checkoutForm").onsubmit = async (e) => {
             e.preventDefault();
-            if (!cart.length) return alert("السلة فارغة، أضف منتجات أولاً.");
+            if (!cart.length) return alert("السلة فارغة.");
             if (!db) return alert("قاعدة البيانات غير متصلة.");
             
             const btn = e.target.querySelector('button');
@@ -424,7 +343,7 @@
             const total = cart.reduce((a, x) => a + x.price * x.qty, 0);
             
             try {
-                // 1. استدعاء الدالة لحفظ الطلب الأساسي
+                // استخدام دالة RPC لحفظ الطلب
                 const { data: orderId, error: orderError } = await db.rpc('create_order', {
                     p_customer_name: f.get("customer_name"),
                     p_phone: f.get("phone"),
@@ -433,26 +352,21 @@
                     p_total: total
                 });
 
-                if (orderError) throw new Error("خطأ في حفظ الطلب: " + orderError.message);
+                if (orderError) throw new Error(orderError.message);
 
-                // 2. حفظ تفاصيل المنتجات في جدول order_items
+                // حفظ التفاصيل
                 const orderItems = cart.map(item => ({
                     order_id: orderId,
                     product_name: item.name,
                     quantity: item.qty,
                     unit_price: item.price
                 }));
-
-                const { error: itemsError } = await db.from("order_items").insert(orderItems);
-                if (itemsError) {
-                    console.error("تم حفظ الطلب لكن فشل حفظ التفاصيل:", itemsError);
-                }
+                await db.from("order_items").insert(orderItems);
                 
-                // 3. النجاح
                 cart = [];
                 renderCart();
                 e.target.reset();
-                alert("✅ تم استلام طلبك بنجاح! شكراً لثقتك بنا، سنتواصل معك قريباً.");
+                alert("✅ تم استلام طلبك بنجاح!");
                 closeCart(); 
 
             } catch (error) {
@@ -463,7 +377,6 @@
             }
         };
 
-        // بدء التشغيل
         renderCart();
         loadProducts();
     </script>
