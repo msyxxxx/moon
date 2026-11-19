@@ -21,15 +21,15 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
         body { background: var(--bg); color: var(--text-main); display: flex; min-height: 100vh; overflow-x: hidden; }
         
-        /* --- Login Screen --- */
+        /* Login */
         .login-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--bg); z-index: 1000; }
-        .login-box { background: var(--surface); padding: 40px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .login-box { background: var(--surface); padding: 40px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 400px; text-align: center; }
         .login-box h1 { margin-bottom: 20px; color: var(--primary); }
         .form-group { margin-bottom: 15px; text-align: right; }
         .form-group label { display: block; margin-bottom: 5px; font-size: 13px; color: var(--text-muted); }
-        .form-control { width: 100%; padding: 12px; background: #241c22; border: 1px solid var(--border); border-radius: 8px; color: white; outline: none; transition: 0.3s; }
+        .form-control { width: 100%; padding: 12px; background: #241c22; border: 1px solid var(--border); border-radius: 8px; color: white; outline: none; }
         .form-control:focus { border-color: var(--primary); }
-        .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; width: 100%; }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
         .btn:hover { background: #f03b5c; }
         .btn-sm { padding: 6px 12px; font-size: 12px; width: auto; border-radius: 6px; }
         .btn-success { background: var(--success); }
@@ -37,60 +37,57 @@
         .btn-danger { background: #ef4444; }
         .btn-secondary { background: var(--surface-hover); border: 1px solid var(--border); }
 
-        /* --- Layout --- */
+        /* Layout */
         .sidebar { width: 260px; background: var(--surface); border-left: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; right: 0; z-index: 100; transition: 0.3s; }
         .sidebar-brand { font-size: 24px; font-weight: 800; color: white; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
         .nav-link { display: flex; align-items: center; gap: 10px; padding: 12px 15px; color: var(--text-muted); text-decoration: none; border-radius: 8px; margin-bottom: 5px; cursor: pointer; transition: 0.2s; font-weight: 600; }
         .nav-link:hover, .nav-link.active { background: rgba(217, 35, 67, 0.1); color: var(--primary); }
-        .logout-btn { margin-top: auto; color: #ef4444; background: rgba(239, 68, 68, 0.1); border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .logout-btn { margin-top: auto; color: #ef4444; background: rgba(239, 68, 68, 0.1); border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
         .main-content { margin-right: 260px; flex: 1; padding: 30px; width: calc(100% - 260px); }
         .section { display: none; animation: fadeIn 0.3s; }
         .section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Stats --- */
+        /* Stats */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: var(--surface); padding: 20px; border-radius: 12px; border: 1px solid var(--border); }
-        .stat-card h3 { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; }
+        .stat-card h3 { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
         .stat-card .value { font-size: 28px; font-weight: 800; color: white; }
         .stat-card .value.highlight { color: var(--primary); }
 
-        /* --- Tables --- */
+        /* Tables */
         .table-container { background: var(--surface); border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: right; }
         th, td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
         th { color: var(--text-muted); font-weight: 600; background: rgba(0,0,0,0.2); }
         tr:last-child td { border-bottom: none; }
+        .table-product-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); display: block; margin: auto; background: white; }
         
-        /* تنسيق صورة المنتج داخل الجدول */
-        .table-product-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); display: block; margin: auto; background: white;}
-        
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
-        .status-new { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-        .status-processing { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-        .status-completed { background: rgba(37, 211, 102, 0.2); color: #34d399; }
         select.status-select { background: #241c22; color: white; border: 1px solid var(--border); padding: 6px; border-radius: 6px; outline: none; }
 
-        /* --- Forms & Modals --- */
+        /* Forms */
         .panel { background: var(--surface); padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
         .panel h2 { font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         @media(max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
         
-        /* تنسيق مخصص لزر رفع الصور */
         .file-upload-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
         .file-upload-wrapper input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; width: 100%; z-index: 2;}
-        .file-upload-btn { border: 2px dashed var(--border); background: rgba(0,0,0,0.2); color: var(--text-muted); padding: 15px; text-align: center; border-radius: 8px; display: block; transition: 0.3s; }
+        .file-upload-btn { border: 2px dashed var(--border); background: rgba(0,0,0,0.2); color: var(--text-muted); padding: 15px; text-align: center; border-radius: 8px; transition: 0.3s; }
         .file-upload-wrapper:hover .file-upload-btn { border-color: var(--primary); color: var(--primary); }
-        
+
+        /* Modal */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--surface); width: 100%; max-width: 600px; border-radius: 12px; padding: 25px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .close-modal { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
 
-        /* --- Mobile Responsive --- */
+        /* Barcode Scanner */
+        #reader { width: 100%; max-width: 400px; margin: 0 auto 15px auto; border-radius: 12px; overflow: hidden; display: none; }
+
+        /* Mobile */
         .menu-toggle { display: none; position: fixed; top: 15px; right: 15px; z-index: 101; background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; }
         @media(max-width: 992px) {
             .sidebar { transform: translateX(100%); }
@@ -102,10 +99,9 @@
 </head>
 <body>
 
-    <!-- شاشة تسجيل الدخول -->
     <div class="login-screen" id="loginScreen">
         <div class="login-box">
-            <h1>لوحة إدارة التوفيق</h1>
+            <h1>إدارة التوفيق</h1>
             <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="email" class="form-control" required></div>
             <div class="form-group"><label>كلمة المرور</label><input type="password" id="password" class="form-control" required></div>
             <button class="btn" onclick="login()">تسجيل الدخول</button>
@@ -113,10 +109,8 @@
         </div>
     </div>
 
-    <!-- زر القائمة للجوال -->
-    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+    <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
 
-    <!-- القائمة الجانبية -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand"><span style="color:var(--primary)">ت</span> التوفيق</div>
         <a class="nav-link active" onclick="switchTab('dashboard')">📊 لوحة القيادة</a>
@@ -125,29 +119,15 @@
         <button class="logout-btn" onclick="logout()">🚪 تسجيل الخروج</button>
     </aside>
 
-    <!-- المحتوى الرئيسي -->
     <main class="main-content">
-        
-        <!-- قسم لوحة القيادة -->
+        <!-- Dashboard -->
         <section id="dashboardSection" class="section active">
             <h2 style="margin-bottom: 20px;">نظرة عامة</h2>
             <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>إجمالي المبيعات</h3>
-                    <div class="value highlight" id="totalSales">0 أوقية</div>
-                </div>
-                <div class="stat-card">
-                    <h3>إجمالي الطلبات</h3>
-                    <div class="value" id="totalOrders">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>المنتجات النشطة</h3>
-                    <div class="value" id="totalProducts">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>طلبات جديدة</h3>
-                    <div class="value" id="newOrders" style="color: var(--warning);">0</div>
-                </div>
+                <div class="stat-card"><h3>إجمالي المبيعات</h3><div class="value highlight" id="totalSales">0 أوقية</div></div>
+                <div class="stat-card"><h3>إجمالي الطلبات</h3><div class="value" id="totalOrders">0</div></div>
+                <div class="stat-card"><h3>المنتجات النشطة</h3><div class="value" id="totalProducts">0</div></div>
+                <div class="stat-card"><h3>طلبات جديدة</h3><div class="value" id="newOrders" style="color: var(--warning);">0</div></div>
             </div>
             <div class="panel">
                 <h2>أحدث الطلبات</h2>
@@ -160,20 +140,18 @@
             </div>
         </section>
 
-        <!-- قسم الطلبات -->
+        <!-- Orders -->
         <section id="ordersSection" class="section">
             <h2 style="margin-bottom: 20px;">إدارة الطلبات</h2>
             <div class="table-container">
                 <table>
-                    <thead>
-                        <tr><th>التاريخ</th><th>العميل</th><th>الهاتف</th><th>المدينة</th><th>الإجمالي</th><th>الحالة</th><th>إجراء</th></tr>
-                    </thead>
+                    <thead><tr><th>التاريخ</th><th>العميل</th><th>الهاتف</th><th>المدينة</th><th>الإجمالي</th><th>الحالة</th><th>إجراء</th></tr></thead>
                     <tbody id="ordersTable"></tbody>
                 </table>
             </div>
         </section>
 
-        <!-- قسم المنتجات -->
+        <!-- Products -->
         <section id="productsSection" class="section">
             <h2 style="margin-bottom: 20px;">إدارة المنتجات</h2>
             
@@ -183,10 +161,7 @@
                     <input type="hidden" id="prodId">
                     
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>اسم المنتج</label>
-                            <input type="text" id="prodName" class="form-control" placeholder="مثال: ساعة ذكية..." required>
-                        </div>
+                        <div class="form-group"><label>اسم المنتج</label><input type="text" id="prodName" class="form-control" required></div>
                         <div class="form-group">
                             <label>القسم</label>
                             <select id="prodCategory" class="form-control">
@@ -200,35 +175,40 @@
                     </div>
                     
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>السعر (أوقية)</label>
-                            <input type="number" id="prodPrice" class="form-control" placeholder="0" required>
-                        </div>
-                        <div class="form-group">
-                            <label>الكمية (المخزون)</label>
-                            <input type="number" id="prodStock" class="form-control" placeholder="0" required>
-                        </div>
+                        <div class="form-group"><label>السعر (أوقية)</label><input type="number" id="prodPrice" class="form-control" required></div>
+                        <div class="form-group"><label>الكمية (المخزون)</label><input type="number" id="prodStock" class="form-control" required></div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label>صور المنتج (يمكنك تحديد عدة صور)</label>
-                            <div class="file-upload-wrapper">
-                                <input type="file" id="prodImages" accept="image/*" multiple onchange="previewImages(event)">
-                                <div class="file-upload-btn">📸 اضغط هنا لاختيار الصور من المعرض</div>
+                            <label>الباركود (يمكنك مسحه بالكاميرا)</label>
+                            <div style="display: flex; gap: 5px;">
+                                <input type="text" id="prodBarcode" class="form-control" placeholder="امسح أو اكتب الباركود">
+                                <button type="button" class="btn btn-secondary" onclick="toggleScanner()" style="width: 50px; padding: 0;">📷</button>
                             </div>
-                            <div id="imagePreviewContainer" style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;"></div>
                         </div>
                         <div class="form-group">
                             <label>حالة النشر</label>
                             <select id="prodActive" class="form-control">
                                 <option value="true">منشور في المتجر</option>
-                                <option value="false">مخفي (غير متوفر)</option>
+                                <option value="false">مخفي</option>
                             </select>
                         </div>
                     </div>
+
+                    <!-- ماسح الباركود المنبثق -->
+                    <div id="reader"></div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>صور المنتج (تحديد متعدد)</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="prodImages" accept="image/*" multiple onchange="previewImages(event)">
+                            <div class="file-upload-btn">📸 اضغط لاختيار الصور من المعرض</div>
+                        </div>
+                        <div id="imagePreviewContainer" style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;"></div>
+                    </div>
                     
-                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <div style="display: flex; gap: 10px;">
                         <button type="submit" class="btn" id="saveProductBtn" style="width: 200px;">حفظ المنتج</button>
                         <button type="button" class="btn btn-secondary" onclick="resetProductForm()" style="width: 150px;">إلغاء</button>
                     </div>
@@ -238,43 +218,35 @@
 
             <div class="table-container">
                 <table>
-                    <thead>
-                        <tr>
-                            <th style="text-align:center; width: 70px;">الصورة</th>
-                            <th>اسم المنتج</th>
-                            <th>القسم</th>
-                            <th>السعر</th>
-                            <th>المخزون</th>
-                            <th>الحالة</th>
-                            <th style="text-align:center;">إجراء</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th style="text-align:center;">الصورة</th><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الباركود</th><th>الحالة</th><th style="text-align:center;">إجراء</th></tr></thead>
                     <tbody id="productsTable"></tbody>
                 </table>
             </div>
         </section>
-
     </main>
 
-    <!-- نافذة تفاصيل الطلب المنبثقة -->
+    <!-- Modal for Order Details -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>تفاصيل الطلب</h2>
-                <button class="close-modal" onclick="closeModal()">✖</button>
+                <button class="close-modal" onclick="document.getElementById('orderModal').classList.remove('active')">✖</button>
             </div>
             <div id="orderDetailsContent"></div>
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script>
         const db = window.supabaseClient;
         let globalProducts = [];
         let globalOrders = [];
+        let html5QrCode = null;
 
-        // --- 1. التحقق من تسجيل الدخول ---
+        // Auth
         async function checkAuth() {
             const { data: { session } } = await db.auth.getSession();
             if (session) {
@@ -292,12 +264,12 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const { data, error } = await db.auth.signInWithPassword({ email, password });
-            if (error) return document.getElementById('loginError').innerText = "بيانات الدخول خاطئة";
+            if (error) return document.getElementById('loginError').innerText = "بيانات خاطئة";
             
             const { data: profile } = await db.from('profiles').select('role').eq('id', data.user.id).single();
             if (profile?.role !== 'admin') {
                 await db.auth.signOut();
-                return document.getElementById('loginError').innerText = "هذا الحساب ليس مديراً";
+                return document.getElementById('loginError').innerText = "ليس لديك صلاحية";
             }
             location.reload();
         }
@@ -307,14 +279,12 @@
             location.reload();
         }
 
-        // --- 2. التنقل بين الأقسام ---
+        // Navigation
         function switchTab(tabId) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            
             document.getElementById(tabId + 'Section').classList.add('active');
             event.target.classList.add('active');
-
             if (window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
 
             if (tabId === 'dashboard') loadDashboard();
@@ -322,14 +292,10 @@
             if (tabId === 'products') loadProducts();
         }
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-        }
+        const money = n => new Intl.NumberFormat("ar-MR").format(n) + " أوقية";
+        const formatDate = d => new Date(d).toLocaleDateString('ar-MR', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
 
-        function money(n) { return new Intl.NumberFormat("ar-MR").format(n) + " أوقية"; }
-        function formatDate(d) { return new Date(d).toLocaleDateString('ar-MR', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' }); }
-
-        // --- 3. لوحة القيادة ---
+        // Dashboard
         async function loadDashboard() {
             const { data: orders } = await db.from('orders').select('total, status');
             const { count: prodCount } = await db.from('products').select('*', { count: 'exact', head: true });
@@ -345,25 +311,19 @@
             const { data: recent } = await db.from('orders').select('*').order('created_at', { ascending: false }).limit(5);
             document.getElementById('recentOrdersTable').innerHTML = (recent || []).map(o => `
                 <tr>
-                    <td>#${o.id.slice(0,6)}</td>
-                    <td>${o.customer_name}</td>
-                    <td>${money(o.total)}</td>
-                    <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+                    <td>#${o.id.slice(0,6)}</td><td>${o.customer_name}</td><td>${money(o.total)}</td>
+                    <td><span style="color:var(--primary)">${o.status}</span></td>
                 </tr>
             `).join('');
         }
 
-        // --- 4. إدارة الطلبات ---
+        // Orders
         async function loadOrders() {
             const { data: orders } = await db.from('orders').select('*').order('created_at', { ascending: false });
             globalOrders = orders || [];
-
             document.getElementById('ordersTable').innerHTML = globalOrders.map(o => `
                 <tr>
-                    <td>${formatDate(o.created_at)}</td>
-                    <td>${o.customer_name}</td>
-                    <td>${o.phone}</td>
-                    <td>${o.city}</td>
+                    <td>${formatDate(o.created_at)}</td><td>${o.customer_name}</td><td>${o.phone}</td><td>${o.city}</td>
                     <td>${money(o.total)}</td>
                     <td>
                         <select class="status-select" onchange="updateOrderStatus('${o.id}', this.value)">
@@ -374,9 +334,9 @@
                             <option value="cancelled" ${o.status==='cancelled'?'selected':''}>ملغي</option>
                         </select>
                     </td>
-                    <td><button class="btn btn-info btn-sm" onclick="viewOrderDetails('${o.id}')">عرض</button></td>
+                    <td><button class="btn btn-info btn-sm" onclick="viewOrder('${o.id}')">عرض</button></td>
                 </tr>
-            `).join('') || '<tr><td colspan="7" style="text-align:center;">لا توجد طلبات.</td></tr>';
+            `).join('');
         }
 
         async function updateOrderStatus(id, status) {
@@ -384,82 +344,49 @@
             loadDashboard();
         }
 
-        async function viewOrderDetails(orderId) {
-            const order = globalOrders.find(o => o.id === orderId);
-            const { data: items } = await db.from('order_items').select('*').eq('order_id', orderId);
-            
-            let html = `
-                <p><b>العميل:</b> ${order.customer_name}</p>
-                <p><b>الهاتف:</b> ${order.phone}</p>
-                <p><b>المدينة:</b> ${order.city}</p>
-                <p><b>العنوان:</b> ${order.address || 'غير محدد'}</p>
-                <hr style="border-color: var(--border); margin: 15px 0;">
-                <h3>المنتجات المطلوبة:</h3>
-                <ul style="list-style: none; padding: 0;">
-            `;
-            if (items && items.length > 0) {
-                items.forEach(i => {
-                    html += `<li style="padding: 10px 0; border-bottom: 1px solid var(--border); display:flex; justify-content:space-between;">
-                        <span>${i.product_name} <b style="color:var(--primary)">× ${i.quantity}</b></span>
-                        <span>${money(i.unit_price * i.quantity)}</span>
-                    </li>`;
-                });
-            } else {
-                html += `<li>لم يتم العثور على تفاصيل (قد يكون طلباً قديماً).</li>`;
-            }
-            html += `</ul>`;
-            document.getElementById('orderDetailsContent').innerHTML = html;
+        async function viewOrder(id) {
+            const order = globalOrders.find(o => o.id === id);
+            const { data: items } = await db.from('order_items').select('*').eq('order_id', id);
+            let html = `<p><b>العميل:</b> ${order.customer_name}</p><p><b>الهاتف:</b> ${order.phone}</p><p><b>العنوان:</b> ${order.city} - ${order.address || ''}</p><hr style="margin:10px 0; border-color:var(--border)"><ul style="list-style:none;padding:0;">`;
+            items?.forEach(i => {
+                html += `<li style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>${i.product_name} × ${i.quantity}</span><b>${money(i.unit_price * i.quantity)}</b></li>`;
+            });
+            document.getElementById('orderDetailsContent').innerHTML = html + '</ul>';
             document.getElementById('orderModal').classList.add('active');
         }
 
-        function closeModal() {
-            document.getElementById('orderModal').classList.remove('active');
-        }
-
-        // --- 5. إدارة المنتجات ---
+        // Products
         async function loadProducts() {
             const { data: prods } = await db.from('products').select('*').order('created_at', { ascending: false });
             globalProducts = prods || [];
-
             document.getElementById('productsTable').innerHTML = globalProducts.map(p => {
-                const img = (p.image_urls && p.image_urls.length > 0) ? p.image_urls[0] : (p.image_url || 'https://via.placeholder.com/50?text=No+Img');
+                const img = (p.image_urls && p.image_urls.length > 0) ? p.image_urls[0] : (p.image_url || 'https://via.placeholder.com/50');
                 return `
                 <tr>
                     <td style="text-align:center;"><img src="${img}" class="table-product-img"></td>
-                    <td style="font-weight:bold;">${p.name}</td>
-                    <td>${p.category}</td>
-                    <td style="color:var(--primary); font-weight:bold;">${money(p.price)}</td>
-                    <td>${p.stock}</td>
-                    <td>${p.is_active ? '<span style="color:var(--success)">منشور</span>' : '<span style="color:var(--text-muted)">مخفي</span>'}</td>
-                    <td style="text-align:center; white-space:nowrap;">
-                        <button class="btn btn-sm btn-secondary" onclick="editProduct('${p.id}')">تعديل</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteProduct('${p.id}')">حذف</button>
+                    <td>${p.name}</td><td>${p.category}</td><td>${money(p.price)}</td><td>${p.stock}</td><td>${p.barcode || '-'}</td>
+                    <td>${p.is_active ? 'منشور' : 'مخفي'}</td>
+                    <td style="text-align:center;">
+                        <button class="btn btn-secondary btn-sm" onclick="editProduct('${p.id}')">تعديل</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')">حذف</button>
                     </td>
                 </tr>`;
-            }).join('') || '<tr><td colspan="7" style="text-align:center;">لا توجد منتجات.</td></tr>';
+            }).join('');
         }
 
-        // معاينة الصور قبل الرفع
         function previewImages(event) {
             const container = document.getElementById('imagePreviewContainer');
             container.innerHTML = '';
-            const files = event.target.files;
-            
-            for(let i=0; i<files.length; i++) {
-                const file = files[i];
+            Array.from(event.target.files).forEach(file => {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = e => {
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.style.width = '60px';
-                    img.style.height = '60px';
-                    img.style.objectFit = 'cover';
-                    img.style.borderRadius = '6px';
-                    img.style.border = '1px solid var(--border)';
+                    img.style.cssText = 'width:60px;height:60px;object-fit:cover;border-radius:6px;border:1px solid var(--border)';
                     container.appendChild(img);
-                }
+                };
                 reader.readAsDataURL(file);
-            }
+            });
         }
 
         function resetProductForm() {
@@ -478,6 +405,7 @@
             document.getElementById('prodCategory').value = p.category || 'أخرى';
             document.getElementById('prodPrice').value = p.price;
             document.getElementById('prodStock').value = p.stock;
+            document.getElementById('prodBarcode').value = p.barcode || '';
             document.getElementById('prodActive').value = p.is_active.toString();
             document.getElementById('productFormTitle').innerText = 'تعديل منتج';
             document.getElementById('imagePreviewContainer').innerHTML = '';
@@ -485,7 +413,7 @@
         }
 
         async function deleteProduct(id) {
-            if(!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
+            if(!confirm('تأكيد الحذف؟')) return;
             await db.from('products').delete().eq('id', id);
             loadProducts();
         }
@@ -494,55 +422,40 @@
             e.preventDefault();
             const btn = document.getElementById('saveProductBtn');
             const msg = document.getElementById('prodMsg');
-            btn.innerText = 'جارٍ الحفظ...'; btn.disabled = true;
-            msg.innerText = '';
+            btn.innerText = 'جارٍ الحفظ...'; btn.disabled = true; msg.innerText = '';
 
             const id = document.getElementById('prodId').value;
             const files = document.getElementById('prodImages').files;
             let uploadedUrls = [];
             
-            // رفع الصور إذا تم اختيارها
             if (files.length > 0) {
                 msg.innerText = 'جارٍ رفع الصور...';
                 for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    const fileName = `${Date.now()}_${i}.${file.name.split('.').pop()}`;
-                    const { error: upErr } = await db.storage.from('product-images').upload(fileName, file);
-                    if (!upErr) {
-                        const url = db.storage.from('product-images').getPublicUrl(fileName).data.publicUrl;
-                        uploadedUrls.push(url);
-                    }
+                    const fileName = `${Date.now()}_${i}.${files[i].name.split('.').pop()}`;
+                    const { error } = await db.storage.from('product-images').upload(fileName, files[i]);
+                    if (!error) uploadedUrls.push(db.storage.from('product-images').getPublicUrl(fileName).data.publicUrl);
                 }
             }
 
-            // إذا كنا نعدل منتجاً موجوداً، نحضر صوره القديمة
             if (id && uploadedUrls.length === 0) {
                 const existing = globalProducts.find(x => x.id === id);
-                if (existing) {
-                    uploadedUrls = existing.image_urls || (existing.image_url ? [existing.image_url] : []);
-                }
+                if (existing) uploadedUrls = existing.image_urls || (existing.image_url ? [existing.image_url] : []);
             }
 
-            const productData = {
+            const row = {
                 name: document.getElementById('prodName').value,
                 category: document.getElementById('prodCategory').value,
                 price: Number(document.getElementById('prodPrice').value),
                 stock: Number(document.getElementById('prodStock').value),
+                barcode: document.getElementById('prodBarcode').value || null,
                 is_active: document.getElementById('prodActive').value === 'true',
                 image_urls: uploadedUrls
             };
 
-            let error;
-            if (id) {
-                const res = await db.from('products').update(productData).eq('id', id);
-                error = res.error;
-            } else {
-                const res = await db.from('products').insert(productData);
-                error = res.error;
-            }
-
-            if (error) {
-                msg.innerText = 'خطأ: ' + error.message;
+            const res = id ? await db.from('products').update(row).eq('id', id) : await db.from('products').insert(row);
+            
+            if (res.error) {
+                msg.innerText = 'خطأ: ' + res.error.message;
                 msg.style.color = '#ef4444';
             } else {
                 msg.innerText = 'تم الحفظ بنجاح!';
@@ -553,7 +466,34 @@
             btn.innerText = 'حفظ المنتج'; btn.disabled = false;
         };
 
-        // بدء التشغيل
+        // Barcode Scanner Integration
+        async function toggleScanner() {
+            const readerDiv = document.getElementById('reader');
+            if (readerDiv.style.display === 'block') {
+                if (html5QrCode) { await html5QrCode.stop(); html5QrCode = null; }
+                readerDiv.style.display = 'none';
+                return;
+            }
+            readerDiv.style.display = 'block';
+            if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
+            try {
+                await html5QrCode.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: { width: 250, height: 150 } },
+                    (decodedText) => {
+                        document.getElementById('prodBarcode').value = decodedText;
+                        html5QrCode.stop();
+                        readerDiv.style.display = 'none';
+                        alert("تم قراءة الباركود: " + decodedText);
+                    },
+                    () => {}
+                );
+            } catch (err) {
+                alert("تعذر تشغيل الكاميرا: " + err);
+                readerDiv.style.display = 'none';
+            }
+        }
+
         checkAuth();
     </script>
 </body>
