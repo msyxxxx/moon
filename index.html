@@ -46,7 +46,7 @@
         .hero h1 { font-family: "Alexandria", sans-serif; font-size: clamp(36px, 5vw, 56px); line-height: 1.2; margin-bottom: 20px; font-weight: 800; }
         .hero h1 em { font-style: normal; background: linear-gradient(120deg, var(--primary), #ff7b95); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero p { color: var(--text-muted); max-width: 450px; font-size: 15px; line-height: 1.8; margin-bottom: 30px; }
-        .primary-btn { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, var(--primary), #b01530); border: 0; border-radius: 10px; color: white; padding: 15px 30px; font: 700 14px "Cairo"; cursor: pointer; box-shadow: 0 10px 30px rgba(217, 35, 67, 0.3); transition: 0.3s; }
+        .primary-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--primary), #b01530); border: 0; border-radius: 10px; color: white; padding: 15px 30px; font: 700 14px "Cairo"; cursor: pointer; box-shadow: 0 10px 30px rgba(217, 35, 67, 0.3); transition: 0.3s; width: 100%;}
         .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(217, 35, 67, 0.5); }
 
         /* --- Trust Badges --- */
@@ -171,7 +171,7 @@
             <div class="hero-content">
                 <h1>كل ما تحتاجه<br><em>في مكان واحد</em></h1>
                 <p>اكتشف تشكيلة واسعة من أفضل المنتجات العالمية والمحلية. جودة عالية، أسعار منافسة، وتجربة تسوق لا مثيل لها.</p>
-                <a class="primary-btn" href="#products">تسوق الآن <span>←</span></a>
+                <a class="primary-btn" href="#products" style="width:auto;">تسوق الآن <span>←</span></a>
             </div>
         </section>
 
@@ -267,19 +267,20 @@
             <input name="phone" placeholder="رقم الهاتف" required>
             <input name="city" placeholder="المدينة / الولاية" required>
             <textarea name="address" placeholder="العنوان بالتفصيل"></textarea>
-            <button class="primary-btn" style="width:100%; justify-content:center;">تأكيد الطلب</button>
+            <button class="primary-btn" style="width:100%;">تأكيد الطلب</button>
         </form>
     </div>
     <div class="scrim" id="scrim"></div>
 
+    <!-- السكربتات -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script>
         const db = window.supabaseClient;
-        let globalProducts = []; // لتخزين جميع المنتجات للفلترة والبحث
+        let globalProducts = []; 
         let cart = JSON.parse(localStorage.getItem("taoufik_cart") || "[]");
 
-        // بيانات المنتجات (مستخرجة من أمازون كبيانات تجريبية)
+        // بيانات المنتجات التجريبية (من أمازون) في حال كانت قاعدة البيانات فارغة
         const seedProducts = [
             { id: "amz-1", name: "Samsung Galaxy S26 Ultra 256GB", category: "الإلكترونيات", price: 45000, image_urls: ["https://m.media-amazon.com/images/I/71Zt2Xp5lXL._AC_SL1500_.jpg"] },
             { id: "amz-2", name: "Sony WH-1000XM5 سماعات لاسلكية", category: "الإلكترونيات", price: 12500, image_urls: ["https://m.media-amazon.com/images/I/51aXv6n5jOL._AC_SL1500_.jpg"] },
@@ -291,7 +292,7 @@
             { id: "amz-8", name: "سترة رسمية كلاسيكية للرجال", category: "الملابس", price: 4200, image_urls: ["https://m.media-amazon.com/images/I/71wS5g5jXOL._AC_SL1500_.jpg"] }
         ];
 
-        // تحميل المنتجات
+        // تحميل المنتجات من قاعدة البيانات أو استخدام البيانات التجريبية
         async function loadProducts() {
             if (db) {
                 const { data } = await db.from("products").select("*").eq("is_active", true).order("created_at", { ascending: false });
@@ -306,7 +307,7 @@
             renderProducts(globalProducts);
         }
 
-        // عرض المنتجات
+        // عرض المنتجات في الصفحة
         function renderProducts(productsToRender) {
             const grid = document.getElementById("productGrid");
             if(productsToRender.length === 0) {
@@ -363,6 +364,7 @@
             if (item) item.qty++;
             else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
             renderCart();
+            
             // تأثير بصري عند الإضافة
             const btn = event.target;
             btn.innerText = "تمت الإضافة ✓";
@@ -407,34 +409,60 @@
             document.getElementById("scrim").classList.remove("show");
         }
 
-        // إتمام الطلب
+        // إتمام الطلب باستخدام دالة RPC (تتجاوز مشكلة الـ Schema Cache نهائياً)
         document.getElementById("checkoutForm").onsubmit = async (e) => {
             e.preventDefault();
-            if (!cart.length) return alert("السلة فارغة");
-            if (!db) return alert("قاعدة البيانات غير متصلة");
+            if (!cart.length) return alert("السلة فارغة، أضف منتجات أولاً.");
+            if (!db) return alert("قاعدة البيانات غير متصلة.");
             
+            const btn = e.target.querySelector('button');
+            btn.innerText = "جارٍ تأكيد الطلب...";
+            btn.disabled = true;
+
             const f = new FormData(e.target);
             const total = cart.reduce((a, x) => a + x.price * x.qty, 0);
             
-            const { error } = await db.from("orders").insert({
-                customer_name: f.get("customer_name"),
-                phone: f.get("phone"),
-                city: f.get("city"),
-                address: f.get("address"),
-                total,
-                status: "new"
-            });
+            try {
+                // 1. استدعاء الدالة لحفظ الطلب الأساسي
+                const { data: orderId, error: orderError } = await db.rpc('create_order', {
+                    p_customer_name: f.get("customer_name"),
+                    p_phone: f.get("phone"),
+                    p_city: f.get("city"),
+                    p_address: f.get("address") || "",
+                    p_total: total
+                });
 
-            if (error) return alert("حدث خطأ: " + error.message);
-            
-            cart = [];
-            renderCart();
-            e.target.reset();
-            alert("تم استلام طلبك بنجاح! شكراً لثقتك.");
-            closeCart();
+                if (orderError) throw new Error("خطأ في حفظ الطلب: " + orderError.message);
+
+                // 2. حفظ تفاصيل المنتجات في جدول order_items
+                const orderItems = cart.map(item => ({
+                    order_id: orderId,
+                    product_name: item.name,
+                    quantity: item.qty,
+                    unit_price: item.price
+                }));
+
+                const { error: itemsError } = await db.from("order_items").insert(orderItems);
+                if (itemsError) {
+                    console.error("تم حفظ الطلب لكن فشل حفظ التفاصيل:", itemsError);
+                }
+                
+                // 3. النجاح
+                cart = [];
+                renderCart();
+                e.target.reset();
+                alert("✅ تم استلام طلبك بنجاح! شكراً لثقتك بنا، سنتواصل معك قريباً.");
+                closeCart(); 
+
+            } catch (error) {
+                alert("❌ " + error.message);
+            } finally {
+                btn.innerText = "تأكيد الطلب";
+                btn.disabled = false;
+            }
         };
 
-        // التهيئة
+        // بدء التشغيل
         renderCart();
         loadProducts();
     </script>
