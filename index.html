@@ -56,7 +56,7 @@
         .badge-text b { display: block; font-size: 13px; }
         .badge-text small { color: var(--text-muted); font-size: 11px; }
 
-        /* --- Owner Section (صورتك بوضوح) --- */
+        /* --- Owner Section --- */
         .owner-section { padding: 80px 5%; display: flex; align-items: center; gap: 50px; background: linear-gradient(to left, var(--bg), var(--surface)); }
         .owner-image-wrapper { flex: 1; position: relative; display: flex; justify-content: center; }
         .owner-image-wrapper::before { content: ''; position: absolute; width: 100%; height: 100%; background: var(--primary); border-radius: 30px; transform: rotate(3deg); z-index: 0; opacity: 0.8; }
@@ -78,19 +78,20 @@
         .cat-card b { font-size: 14px; }
 
         /* --- Product Grid --- */
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 25px; }
-        .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
-        .product-card:hover { transform: translateY(-8px); border-color: rgba(217, 35, 67, 0.4); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
-        .product-image-box { height: 220px; background: #fff; display: grid; place-items: center; padding: 15px; position: relative; }
-        .product-image-box img { width: 100%; height: 100%; object-fit: contain; transition: 0.3s; }
-        .product-card:hover .product-image-box img { transform: scale(1.08); }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        .product-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; height: 100%; }
+        .product-card:hover { transform: translateY(-5px); border-color: rgba(217, 35, 67, 0.4); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
         
-        .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .category-tag { color: var(--text-muted); font-size: 11px; margin-bottom: 8px; display: block; }
-        .product-info h3 { font-size: 15px; line-height: 1.4; margin-bottom: 15px; }
+        .product-image-box { height: 220px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 15px; position: relative; width: 100%; }
+        .product-image-box img { width: 100%; height: 100%; object-fit: contain; transition: 0.3s; }
+        .product-card:hover .product-image-box img { transform: scale(1.05); }
+        
+        .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; text-align: right; }
+        .category-tag { color: var(--text-muted); font-size: 11px; margin-bottom: 5px; display: block; }
+        .product-info h3 { font-size: 15px; line-height: 1.4; margin-bottom: 15px; font-weight: 700; color: white; }
         .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .price { font-size: 18px; font-weight: 800; color: var(--gold); }
-        .add-cart { width: 100%; border: 1px solid var(--primary); border-radius: 8px; background: transparent; color: var(--primary); padding: 12px; font: 700 13px "Cairo"; cursor: pointer; transition: 0.3s; }
+        .add-cart { width: 100%; border: 1px solid var(--primary); border-radius: 8px; background: transparent; color: var(--primary); padding: 10px; font: 700 13px "Cairo"; cursor: pointer; transition: 0.3s; }
         .add-cart:hover { background: var(--primary); color: white; }
 
         /* --- Cart Drawer --- */
