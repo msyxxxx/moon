@@ -59,9 +59,13 @@
         /* --- Tables --- */
         .table-container { background: var(--surface); border-radius: 12px; border: 1px solid var(--border); overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: right; }
-        th, td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th, td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
         th { color: var(--text-muted); font-weight: 600; background: rgba(0,0,0,0.2); }
         tr:last-child td { border-bottom: none; }
+        
+        /* تنسيق صورة المنتج داخل الجدول */
+        .table-product-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border); display: block; margin: auto; background: white;}
+        
         .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
         .status-new { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
         .status-processing { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
@@ -73,6 +77,12 @@
         .panel h2 { font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         @media(max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
+        
+        /* تنسيق مخصص لزر رفع الصور */
+        .file-upload-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
+        .file-upload-wrapper input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; width: 100%; z-index: 2;}
+        .file-upload-btn { border: 2px dashed var(--border); background: rgba(0,0,0,0.2); color: var(--text-muted); padding: 15px; text-align: center; border-radius: 8px; display: block; transition: 0.3s; }
+        .file-upload-wrapper:hover .file-upload-btn { border-color: var(--primary); color: var(--primary); }
         
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
         .modal-overlay.active { display: flex; }
@@ -171,8 +181,12 @@
                 <h2 id="productFormTitle">إضافة منتج جديد</h2>
                 <form id="productForm">
                     <input type="hidden" id="prodId">
+                    
                     <div class="form-row">
-                        <div class="form-group"><label>اسم المنتج</label><input type="text" id="prodName" class="form-control" required></div>
+                        <div class="form-group">
+                            <label>اسم المنتج</label>
+                            <input type="text" id="prodName" class="form-control" placeholder="مثال: ساعة ذكية..." required>
+                        </div>
                         <div class="form-group">
                             <label>القسم</label>
                             <select id="prodCategory" class="form-control">
@@ -184,23 +198,57 @@
                             </select>
                         </div>
                     </div>
+                    
                     <div class="form-row">
-                        <div class="form-group"><label>السعر (أوقية)</label><input type="number" id="prodPrice" class="form-control" required></div>
-                        <div class="form-group"><label>الكمية (المخزون)</label><input type="number" id="prodStock" class="form-control" required></div>
+                        <div class="form-group">
+                            <label>السعر (أوقية)</label>
+                            <input type="number" id="prodPrice" class="form-control" placeholder="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label>الكمية (المخزون)</label>
+                            <input type="number" id="prodStock" class="form-control" placeholder="0" required>
+                        </div>
                     </div>
+                    
                     <div class="form-row">
-                        <div class="form-group"><label>صور المنتج (يمكنك تحديد عدة صور)</label><input type="file" id="prodImages" class="form-control" accept="image/*" multiple></div>
-                        <div class="form-group"><label>حالة النشر</label><select id="prodActive" class="form-control"><option value="true">منشور</option><option value="false">مخفي</option></select></div>
+                        <div class="form-group">
+                            <label>صور المنتج (يمكنك تحديد عدة صور)</label>
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="prodImages" accept="image/*" multiple onchange="previewImages(event)">
+                                <div class="file-upload-btn">📸 اضغط هنا لاختيار الصور من المعرض</div>
+                            </div>
+                            <div id="imagePreviewContainer" style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>حالة النشر</label>
+                            <select id="prodActive" class="form-control">
+                                <option value="true">منشور في المتجر</option>
+                                <option value="false">مخفي (غير متوفر)</option>
+                            </select>
+                        </div>
                     </div>
-                    <button type="submit" class="btn" id="saveProductBtn" style="width: 200px;">حفظ المنتج</button>
-                    <button type="button" class="btn btn-secondary" onclick="resetProductForm()" style="width: 150px; margin-right: 10px;">إلغاء</button>
-                    <p id="prodMsg" style="margin-top: 10px; font-size: 13px;"></p>
+                    
+                    <div style="margin-top: 20px; display: flex; gap: 10px;">
+                        <button type="submit" class="btn" id="saveProductBtn" style="width: 200px;">حفظ المنتج</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetProductForm()" style="width: 150px;">إلغاء</button>
+                    </div>
+                    <p id="prodMsg" style="margin-top: 15px; font-size: 13px;"></p>
                 </form>
             </div>
 
             <div class="table-container">
                 <table>
-                    <thead><tr><th>الصورة</th><th>المنتج</th><th>القسم</th><th>السعر</th><th>المخزون</th><th>الحالة</th><th>إجراء</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th style="text-align:center; width: 70px;">الصورة</th>
+                            <th>اسم المنتج</th>
+                            <th>القسم</th>
+                            <th>السعر</th>
+                            <th>المخزون</th>
+                            <th>الحالة</th>
+                            <th style="text-align:center;">إجراء</th>
+                        </tr>
+                    </thead>
                     <tbody id="productsTable"></tbody>
                 </table>
             </div>
@@ -219,7 +267,6 @@
         </div>
     </div>
 
-    <!-- السكربتات -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     <script>
@@ -375,16 +422,16 @@
             globalProducts = prods || [];
 
             document.getElementById('productsTable').innerHTML = globalProducts.map(p => {
-                const img = (p.image_urls && p.image_urls.length > 0) ? p.image_urls[0] : (p.image_url || 'https://via.placeholder.com/50');
+                const img = (p.image_urls && p.image_urls.length > 0) ? p.image_urls[0] : (p.image_url || 'https://via.placeholder.com/50?text=No+Img');
                 return `
                 <tr>
-                    <td><img src="${img}" style="width: 40px; height: 40px; border-radius: 6px; object-fit: cover;"></td>
-                    <td>${p.name}</td>
+                    <td style="text-align:center;"><img src="${img}" class="table-product-img"></td>
+                    <td style="font-weight:bold;">${p.name}</td>
                     <td>${p.category}</td>
-                    <td>${money(p.price)}</td>
+                    <td style="color:var(--primary); font-weight:bold;">${money(p.price)}</td>
                     <td>${p.stock}</td>
                     <td>${p.is_active ? '<span style="color:var(--success)">منشور</span>' : '<span style="color:var(--text-muted)">مخفي</span>'}</td>
-                    <td>
+                    <td style="text-align:center; white-space:nowrap;">
                         <button class="btn btn-sm btn-secondary" onclick="editProduct('${p.id}')">تعديل</button>
                         <button class="btn btn-sm btn-danger" onclick="deleteProduct('${p.id}')">حذف</button>
                     </td>
@@ -392,11 +439,35 @@
             }).join('') || '<tr><td colspan="7" style="text-align:center;">لا توجد منتجات.</td></tr>';
         }
 
+        // معاينة الصور قبل الرفع
+        function previewImages(event) {
+            const container = document.getElementById('imagePreviewContainer');
+            container.innerHTML = '';
+            const files = event.target.files;
+            
+            for(let i=0; i<files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '60px';
+                    img.style.height = '60px';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = '6px';
+                    img.style.border = '1px solid var(--border)';
+                    container.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
         function resetProductForm() {
             document.getElementById('productForm').reset();
             document.getElementById('prodId').value = '';
             document.getElementById('productFormTitle').innerText = 'إضافة منتج جديد';
             document.getElementById('prodMsg').innerText = '';
+            document.getElementById('imagePreviewContainer').innerHTML = '';
         }
 
         function editProduct(id) {
@@ -409,6 +480,7 @@
             document.getElementById('prodStock').value = p.stock;
             document.getElementById('prodActive').value = p.is_active.toString();
             document.getElementById('productFormTitle').innerText = 'تعديل منتج';
+            document.getElementById('imagePreviewContainer').innerHTML = '';
             window.scrollTo(0, 0);
         }
 
