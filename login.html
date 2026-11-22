@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دخول المدير | بورصة ساحل</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Tajawal',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.box{background:#fff;width:100%;max-width:380px;border-radius:24px;padding:28px;text-align:center}
+.logo{width:64px;height:64px;background:#111;color:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;margin:0 auto 14px}
+.field{margin:14px 0;text-align:right}.field label{font-size:12px;font-weight:800;display:block;margin-bottom:6px}.input{width:100%;padding:12px;border:1.5px solid #EDEDEA;border-radius:12px;font-size:14px;outline:none}
+.btn{width:100%;background:#E31E24;color:#fff;padding:13px;border-radius:12px;font-weight:800;cursor:pointer;border:none;font-family:inherit}
+.msg{font-size:12px;font-weight:700;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="box">
+<div class="logo">SAHEL</div>
+<h2>لوحة تحكم بورصة ساحل</h2>
+<p style="font-size:12px;color:#7A7A76;margin-top:6px">دخول المدير فقط - يتم التحقق عبر Supabase</p>
+<div class="field"><label>البريد الإلكتروني</label><input class="input" id="email" type="email" placeholder="admin@sahel.mr"></div>
+<div class="field"><label>كلمة السر</label><input class="input" id="password" type="password" placeholder="••••••••"></div>
+<p class="msg" id="msg"></p>
+<button class="btn" onclick="doLogin()">دخول لوحة التحكم</button>
+<p style="font-size:11px;color:#7A7A76;margin-top:14px">•</p>
+</div>
+<script>
+// 1 - ضع هنا بيانات مشروعك من Supabase بعد إنشائه
+const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function doLogin(){
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const msg = document.getElementById('msg');
+  if(!email || !password){ msg.style.color='#B91C1C'; msg.innerText='أدخل البريد وكلمة السر'; return; }
+  msg.style.color='#111'; msg.innerText='جارٍ التحقق...';
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if(error){ msg.style.color='#B91C1C'; msg.innerText='بيانات الدخول خاطئة: ' + error.message; return; }
+  msg.style.color='#0A7A42'; msg.innerText='تم الدخول بنجاح - جارٍ تحويلك...';
+  // حفظ الجلسة ثم الانتقال للوحة
+  setTimeout(()=> window.location.href = 'admin.html', 800);
+}
+// إذا كان مسجلا بالفعل، ادخل مباشرة
+supabase.auth.getSession().then(({data})=>{
+  if(data.session) window.location.href='admin.html';
+});
+</script>
+</body>
+</html>
