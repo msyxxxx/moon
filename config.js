@@ -1,6 +1,6 @@
 // ============================================
-// بورصة ساحل - ملف الإعدادات الوحيد
-// تم إعداده بمعلوماتك الحقيقية - لا تغير فيه شيئا إلا عند الحاجة
+// بورصة ساحل - BOURSA SAHEL - ملف الإعدادات الوحيد
+// عدّل هذا الملف فقط، وكل المنصة ستتغير معه
 // ============================================
 
 window.SAHEL_CONFIG = {
@@ -12,7 +12,7 @@ window.SAHEL_CONFIG = {
   brandName: "بورصة ساحل",
   brandNameEn: "BOURSA SAHEL",
   city: "نواكشوط - موريتانيا",
-  whatsapp: "22220272057", // رقمك: 20272057 + كود موريتانيا 222
+  whatsapp: "22220272057",
   phone: "22220272057",
   email: "admin@boursa.com",
   mapUrl: "https://maps.google.com/?q=نواكشوط",
@@ -30,7 +30,10 @@ window.SAHEL_CONFIG = {
     age0_2: 0.35,
     age3_5: 0.28,
     age6plus: 0.18
-  }
+  },
+
+  // --- 5. صورة بديلة عند عدم وجود صورة ---
+  fallbackImage: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80"
 };
 
 window.getSupabase = function(){
