@@ -28,17 +28,34 @@ input,select,textarea{font-family:inherit;outline:none}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .upload{border:2px dashed #D8D8D2;border-radius:16px;padding:16px;text-align:center;background:#F7F7F5;cursor:pointer}
 .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.thumbs img{width:80px;height:60px;object-fit:cover;border-radius:10px}
+.thumbs img{width:80px;height:60px;object-fit:cover;border-radius:10px;cursor:zoom-in}
 .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .tabs button{padding:10px 16px;border-radius:999px;background:#fff;font-weight:800;font-size:12px;border:1px solid #EDEDEA}
 .tabs button.active{background:#111;color:#fff}
 .table{width:100%;border-collapse:collapse;font-size:13px}
 .table th{text-align:right;padding:12px;background:#F7F7F4;font-size:11px}
 .table td{padding:12px;border-top:1px solid #eee;vertical-align:top}
-.table img{width:60px;height:42px;object-fit:cover;border-radius:8px;background:#eee}
+.table img{width:60px;height:42px;object-fit:cover;border-radius:8px;background:#eee;cursor:zoom-in}
 .btn-red{background:#E31E24;color:#fff;padding:12px;border-radius:12px;font-weight:800;width:100%}
 .btn-dark{background:#111;color:#fff;padding:12px;border-radius:12px;font-weight:800;width:100%}
 #reader{width:100%;max-width:360px;margin:10px auto;border-radius:12px;overflow:hidden}
+.storage-bar{height:12px;background:#F0F0EC;border-radius:999px;overflow:hidden;margin:10px 0}
+.storage-bar-fill{height:100%;background:linear-gradient(90deg,#0A7A42,#E31E24);border-radius:999px;transition:width .5s}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:200;display:none;flex-direction:column}
+.lightbox.show{display:flex}
+.lb-top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;color:#fff}
+.lb-top b{font-size:13px}
+.lb-top button{background:rgba(255,255,255,.15);color:#fff;width:38px;height:38px;border-radius:50%;font-size:18px;font-weight:900}
+.lb-stage{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;padding:0 10px}
+.lb-stage img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px;transition:transform .2s;cursor:zoom-in}
+.lb-stage img.zoomed{transform:scale(2.2);cursor:zoom-out}
+.lb-counter{text-align:center;color:#fff;font-size:12px;font-weight:800;padding:8px}
+.lb-thumbs{display:flex;gap:8px;overflow-x:auto;padding:10px 14px 18px;justify-content:center}
+.lb-thumbs img{width:56px;height:42px;object-fit:cover;border-radius:8px;opacity:.5;border:2px solid transparent;cursor:pointer;flex-shrink:0}
+.lb-thumbs img.active{opacity:1;border-color:#E31E24}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center}
+.lb-prev{right:8px}
+.lb-next{left:8px}
 @media(max-width:640px){.row2,.row3{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
@@ -46,6 +63,17 @@ input,select,textarea{font-family:inherit;outline:none}
 <div class="top"><div><b>بورصة ساحل • لوحة التحكم PRO</b><br><span id="adminEmail">جارٍ التحقق...</span></div><div style="display:flex;gap:8px"><button onclick="window.open('index.html','_blank')" style="background:#fff;color:#111;padding:9px 14px;border-radius:10px;font-weight:800;font-size:12px">عرض المنصة</button><button onclick="logout()" style="background:#E31E24;color:#fff;padding:9px 14px;border-radius:10px;font-weight:800;font-size:12px">خروج</button></div></div>
 <div class="wrap">
 <div class="kpis"><div class="kpi"><b id="kpiTotal">0</b><span>سيارة</span></div><div class="kpi"><b id="kpiAvail">0</b><span>متوفرة</span></div><div class="kpi"><b id="kpiVerified">0</b><span>موثقة VIN</span></div><div class="kpi"><b id="kpiViews">0</b><span>مشاهدة</span></div></div>
+
+<!-- عداد المساحة المتبقية -->
+<div class="card" style="border:2px solid #111">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><h3 style="margin:0">المساحة المتاحة في Supabase</h3><button onclick="updateStorageMeter()" style="padding:8px 12px;background:#F7F7F4;border-radius:10px;font-weight:800;font-size:12px">تحديث العداد ↻</button></div>
+<div class="storage-bar"><div class="storage-bar-fill" id="storageFill" style="width:0%"></div></div>
+<div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800;flex-wrap:wrap;gap:6px"><span id="storageUsedText">جارٍ حساب المساحة...</span><span id="storageFreeText" style="color:#0A7A42"></span></div>
+<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:#555"><span>الصور: <b id="storageImgCount">-</b> صورة</span><span>الفيديو: <b id="storageVidCount">-</b> فيديو</span><span>الحد الأقصى للخطة المجانية: <b>1 GB (1024 MB)</b></span></div>
+<div id="storageWarn" style="font-size:12px;font-weight:800;margin-top:8px"></div>
+<p style="font-size:11px;color:#7A7A76;margin-top:8px">نصيحة: الصور تُضغط تلقائيا قبل الرفع لتوفير المساحة. إذا اقتربت من الامتلاء، احذف صور السيارات المباعة من التخزين.</p>
+</div>
+
 <div class="tabs"><button class="active" onclick="showTab('tab-add',this)">إضافة سيارة + VIN</button><button onclick="showTab('tab-manage',this)">إدارة + تتبع</button><button onclick="showTab('tab-qr',this)">مسح QR / VIN</button><button onclick="showTab('tab-reports',this)">البلاغات</button></div>
 
 <div id="tab-add"><div class="card"><h3>ملف السيارة المدموج - قديم + جديد في سجل واحد</h3>
@@ -58,142 +86,55 @@ input,select,textarea{font-family:inherit;outline:none}
 <div style="background:#FFF7ED;border-radius:14px;padding:14px;margin-bottom:12px"><h4 style="font-size:13px">معلوماتها القديمة - قبل الشحن</h4><div class="row2" style="margin-top:10px"><div class="field"><label>كم كانت ماشية في الخارج؟</label><input class="input" id="fOldKm" placeholder="12,000 كم في دبي"></div><div class="field"><label>الحوادث القديمة</label><input class="input" id="fOldAcc" placeholder="بدون حادث"></div></div><div class="field"><label>اللوحة القديمة</label><input class="input" id="fPlateOld" placeholder="DUB-8841"></div></div>
 <div style="background:#E8F5E9;border-radius:14px;padding:14px;margin-bottom:12px"><h4 style="font-size:13px">معلوماتها الجديدة - بعد الشحن لموريتانيا - مدموجة مع القديمة في نفس الملف</h4><div class="row2" style="margin-top:10px"><div class="field"><label>اللوحة الجديدة</label><input class="input" id="fPlateNew" placeholder="NK-2026-014"></div><div class="field"><label>الجمركة</label><select class="input" id="fCustoms"><option>مدفوعة</option><option>قيد المعالجة</option><option>غير مدفوعة</option></select></div></div><div class="row2"><div class="field"><label>رقم التتبع</label><input class="input" id="fTrack" placeholder="SAH-2026-014"></div><div class="field"><label>مرحلة الشحن</label><select class="input" id="fTrackStep"><option value="0">تم الشراء</option><option value="1">الشحن</option><option value="2">في البحر</option><option value="3">الجمارك</option><option value="4">جاهزة</option></select></div></div><label style="font-size:12px;font-weight:800"><input type="checkbox" id="fVerified" checked> سيارة موثقة VIN</label></div>
 <div class="field"><label>وصف السيارة</label><textarea class="input" id="fDesc" rows="3"></textarea></div>
-<div class="field"><label>عدة صور - حتى 20 صورة - ضغط تلقائي قبل الرفع</label><div class="upload" onclick="document.getElementById('fileImages').click()"><b>اضغط لرفع عدة صور</b><br><span style="font-size:12px;color:#7A7A76">اختر حتى 20 صورة دفعة واحدة</span><input type="file" id="fileImages" accept="image/*" multiple hidden onchange="handleImages(this)"><div class="thumbs" id="thumbs"></div></div></div>
+<div class="field"><label>عدة صور - حتى 20 صورة - ضغط تلقائي قبل الرفع - اضغط على أي صورة لعرضها كاملة</label><div class="upload" onclick="document.getElementById('fileImages').click()"><b>اضغط لرفع عدة صور</b><br><span style="font-size:12px;color:#7A7A76">اختر حتى 20 صورة دفعة واحدة</span><input type="file" id="fileImages" accept="image/*" multiple hidden onchange="handleImages(this)"><div class="thumbs" id="thumbs"></div></div><div id="uploadSpaceHint" style="font-size:11px;color:#7A7A76;margin-top:6px"></div></div>
 <div class="field"><label>فيديو السيارة</label><div class="upload" onclick="document.getElementById('fileVideo').click()"><b>اضغط لرفع فيديو</b><br><span style="font-size:12px;color:#7A7A76">MP4 - حتى 50MB</span><input type="file" id="fileVideo" accept="video/*" hidden onchange="handleVideo(this)"><div id="videoPreview" style="margin-top:10px"></div></div></div>
 <div style="display:flex;gap:8px"><button class="btn-red" onclick="saveCar()" id="saveBtn" style="flex:1">حفظ ملف السيارة المدموج</button><button onclick="clearForm()" style="padding:12px 16px;background:#F7F7F4;border-radius:12px;font-weight:800">مسح</button></div><p id="formMsg" style="font-size:12px;color:#E31E24;font-weight:700;margin-top:8px"></p></div></div>
 
-<div id="tab-manage" style="display:none"><div class="card"><h3>كل السيارات - إدارة + تتبع + QR</h3><div style="overflow-x:auto"><table class="table"><thead><tr><th>صورة</th><th>السيارة</th><th>VIN / تتبع</th><th>السعر</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="adminTable"></tbody></table></div></div></div>
+<div id="tab-manage" style="display:none"><div class="card"><h3>كل السيارات - إدارة + تتبع + QR - اضغط على الصورة لعرضها كاملة</h3><div style="overflow-x:auto"><table class="table"><thead><tr><th>صورة</th><th>السيارة</th><th>VIN / تتبع</th><th>السعر</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="adminTable"></tbody></table></div></div></div>
 <div id="tab-qr" style="display:none"><div class="card"><h3>مسح QR لأخذ معلومات السيارة</h3><button class="btn-dark" onclick="startScan()">بدء مسح QR بالكاميرا</button><button onclick="stopScan()" style="width:100%;padding:11px;background:#F7F7F4;border-radius:12px;font-weight:800;margin-top:8px">إيقاف الكاميرا</button><div id="reader"></div><div id="scanResult" style="margin-top:12px"></div></div></div>
 <div id="tab-reports" style="display:none"><div class="card"><h3>بلاغات الزبائن - نفع عام</h3><div id="reportsList"></div></div></div>
 </div>
-
+<div class="lightbox" id="lightbox"><div class="lb-top"><b id="lbTitle">بورصة ساحل</b><div style="display:flex;gap:8px"><button onclick="toggleZoom()">+</button><button onclick="closeLightbox()">X</button></div></div><div class="lb-stage" id="lbStage"><button class="lb-nav lb-prev" onclick="event.stopPropagation();lbPrev()">‹</button><img id="lbImg" onclick="toggleZoom()"><button class="lb-nav lb-next" onclick="event.stopPropagation();lbNext()">›</button></div><div class="lb-counter" id="lbCounter">1 / 1</div><div class="lb-thumbs" id="lbThumbs"></div></div>
 <script>
 const CFG = window.SAHEL_CONFIG;
 let cars=[], editingId=null, uploadedFiles=[], uploadedVideoFile=null, scanner=null;
 const sb = window.getSupabase();
+const STORAGE_LIMIT_MB = 1024;
+let storageState = { usedMB:0, freeMB:1024, imgCount:0, vidCount:0 };
+function fmtMB(mb){ if(mb<1) return (mb*1024).toFixed(0)+' KB'; if(mb<1024) return mb.toFixed(1)+' MB'; return (mb/1024).toFixed(2)+' GB'; }
 if(!sb){ alert('لم يتم ربط Supabase بعد - عدّل config.js'); }
-else{
-  sb.auth.getSession().then(({data})=>{
-    if(!data.session){ window.location.href='login.html'; return; }
-    document.getElementById('adminEmail').innerText='مرحبا: '+data.session.user.email;
-    loadCars(); loadReports();
-  });
-}
+else{ sb.auth.getSession().then(({data})=>{ if(!data.session){ window.location.href='login.html'; return; } document.getElementById('adminEmail').innerText='مرحبا: '+data.session.user.email; loadCars(); loadReports(); updateStorageMeter(); }); }
 async function logout(){ await sb.auth.signOut(); window.location.href='login.html'; }
 function showTab(id,btn){ ['tab-add','tab-manage','tab-qr','tab-reports'].forEach(t=>document.getElementById(t).style.display='none'); document.getElementById(id).style.display='block'; document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
-async function loadCars(){
-  const { data, error } = await sb.from('cars').select('*').order('created_at',{ascending:false});
-  if(error){ alert('خطأ: '+error.message); return; }
-  cars=data||[]; render();
-}
-async function loadReports(){
-  const { data } = await sb.from('reports').select('*').order('created_at',{ascending:false}).limit(20);
-  document.getElementById('reportsList').innerHTML = (data||[]).length ? data.map(r=>`<div style="padding:10px;border-bottom:1px solid #eee;font-size:13px"><b>${r.reason||''}</b><br><span style="color:#7A7A76;font-size:11px">${r.vin||''} • ${new Date(r.created_at).toLocaleString('ar')}</span></div>`).join('') : '<p style="font-size:13px;color:#7A7A76">لا توجد بلاغات</p>';
-}
-function render(){
-  document.getElementById('kpiTotal').innerText=cars.length;
-  document.getElementById('kpiAvail').innerText=cars.filter(c=>c.status==='متوفرة').length;
-  document.getElementById('kpiVerified').innerText=cars.filter(c=>c.verified).length;
-  document.getElementById('kpiViews').innerText=cars.reduce((s,c)=>s+(c.views||0),0);
-  document.getElementById('adminTable').innerHTML=cars.map(c=>{
-    let img = (c.images && c.images[0]) ? c.images[0] : CFG.fallbackImage;
-    return `<tr><td><img src="${img}" onerror="this.onerror=null;this.src='${CFG.fallbackImage}'"></td><td><b>${c.title}</b><br><span style="color:#7A7A76;font-size:11px">${c.brand} • ${(c.images||[]).length} صور ${c.video?'• فيديو':''}</span></td><td style="font-size:11px"><b>VIN:</b> ${c.vin}<br><b>تتبع:</b> ${c.track_code} • مرحلة ${(c.track_step||0)+1}/5</td><td>${Number(c.price).toLocaleString()} MRU</td><td>${c.status}</td><td><button onclick="editCar('${c.id}')" style="padding:6px 10px;background:#F7F7F4;border-radius:8px;font-size:11px;font-weight:800">تعديل</button> <button onclick="deleteCar('${c.id}')" style="padding:6px 10px;background:#FEF2F2;color:#E31E24;border-radius:8px;font-size:11px;font-weight:800">حذف</button> <button onclick="printQR('${c.id}')" style="padding:6px 10px;background:#111;color:#fff;border-radius:8px;font-size:11px;font-weight:800">طباعة QR</button></td></tr>`;
-  }).join('');
-}
-async function decodeVIN(){
-  let vin=document.getElementById('fVin').value.trim().toUpperCase();
-  if(vin.length!==17){ document.getElementById('vinResult').innerHTML='<span style="color:#B91C1C">رقم الصندوق يجب أن يكون 17 حرفا</span>'; return; }
-  document.getElementById('vinResult').innerHTML='جارٍ فك الرقم من NHTSA...';
-  try{ let res=await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${vin}?format=json`); let j=await res.json(); let r=j.Results[0]; if(!r||!r.Make) throw new Error('no'); document.getElementById('vinResult').innerHTML=`<b style="color:#0A7A42">تم فك الرقم:</b> ${r.Make} ${r.Model} • ${r.ModelYear} • ${r.FuelTypePrimary||''} • ${r.PlantCountry||''}`; if(r.ModelYear) document.getElementById('fYear').value=r.ModelYear; if(r.Model) document.getElementById('fTitle').value=(r.Make+' '+r.Model).toUpperCase(); }catch(e){ document.getElementById('vinResult').innerHTML='<span style="color:#9A3412">لم نجد الرقم - أكمل البيانات يدويا</span>'; }
-}
-function handleImages(input){
-  let files=[...input.files];
-  if(!files.length) return;
-  if(uploadedFiles.length + files.length > CFG.maxImages){ alert('يمكنك رفع حتى '+CFG.maxImages+' صورة'); files=files.slice(0, CFG.maxImages - uploadedFiles.length); }
-  files.forEach(f=> compressImage(f, 1200, 0.75, (cf)=>{ uploadedFiles.push(cf); renderThumbs(); }));
-}
-function renderThumbs(){
-  if(uploadedFiles.length===0 && editingId){
-    let oldCar = cars.find(c=>String(c.id)===String(editingId));
-    if(oldCar && oldCar.images && oldCar.images.length){
-      document.getElementById('thumbs').innerHTML = oldCar.images.map(u=>`<div style="position:relative"><img src="${u}"><span style="display:block;font-size:10px;text-align:center;color:#0A7A42;font-weight:800">محفوظة</span></div>`).join('');
-      return;
-    }
-  }
-  document.getElementById('thumbs').innerHTML = uploadedFiles.map((f,i)=>`<div style="position:relative"><img src="${URL.createObjectURL(f)}"><button onclick="removeImg(${i})" style="position:absolute;top:-6px;left:-6px;background:#E31E24;color:#fff;width:20px;height:20px;border-radius:50%;font-size:11px">X</button><span style="display:block;font-size:10px;text-align:center">${(f.size/1024).toFixed(0)} KB</span></div>`).join('') + `<div style="width:100%;font-size:11px;color:#7A7A76">صور جديدة: ${uploadedFiles.length} / ${CFG.maxImages} - الصور القديمة محفوظة ولن تُحذف</div>`;
-}
+async function loadCars(){ const { data, error } = await sb.from('cars').select('*').order('created_at',{ascending:false}); if(error){ alert('خطأ: '+error.message); return; } cars=data||[]; render(); }
+async function loadReports(){ const { data } = await sb.from('reports').select('*').order('created_at',{ascending:false}).limit(20); document.getElementById('reportsList').innerHTML = (data||[]).length ? data.map(r=>`<div style="padding:10px;border-bottom:1px solid #eee;font-size:13px"><b>${r.reason||''}</b><br><span style="color:#7A7A76;font-size:11px">${r.vin||''} • ${new Date(r.created_at).toLocaleString('ar')}</span></div>`).join('') : '<p style="font-size:13px;color:#7A7A76">لا توجد بلاغات</p>'; }
+function render(){ document.getElementById('kpiTotal').innerText=cars.length; document.getElementById('kpiAvail').innerText=cars.filter(c=>c.status==='متوفرة').length; document.getElementById('kpiVerified').innerText=cars.filter(c=>c.verified).length; document.getElementById('kpiViews').innerText=cars.reduce((s,c)=>s+(c.views||0),0); document.getElementById('adminTable').innerHTML=cars.map(c=>{ let img = (c.images && c.images[0]) ? c.images[0] : CFG.fallbackImage; let imgsJson = JSON.stringify(c.images||[]).replace(/"/g,'&quot;'); return `<tr><td><img src="${img}" onclick="openLightbox(${imgsJson},0,'${c.title}')" onerror="this.onerror=null;this.src='${CFG.fallbackImage}'"></td><td><b>${c.title}</b><br><span style="color:#7A7A76;font-size:11px">${c.brand} • ${(c.images||[]).length} صور ${c.video?'• فيديو':''}</span></td><td style="font-size:11px"><b>VIN:</b> ${c.vin}<br><b>تتبع:</b> ${c.track_code} • مرحلة ${(c.track_step||0)+1}/5</td><td>${Number(c.price).toLocaleString()} MRU</td><td>${c.status}</td><td><button onclick="editCar('${c.id}')" style="padding:6px 10px;background:#F7F7F4;border-radius:8px;font-size:11px;font-weight:800">تعديل</button> <button onclick="deleteCar('${c.id}')" style="padding:6px 10px;background:#FEF2F2;color:#E31E24;border-radius:8px;font-size:11px;font-weight:800">حذف</button> <button onclick="printQR('${c.id}')" style="padding:6px 10px;background:#111;color:#fff;border-radius:8px;font-size:11px;font-weight:800">طباعة QR</button></td></tr>`; }).join(''); }
+async function getBucketSize(bucket){ let totalBytes=0, count=0, offset=0; while(true){ const { data, error } = await sb.storage.from(bucket).list('', { limit:100, offset, sortBy:{column:'created_at', order:'desc'} }); if(error || !data || !data.length) break; data.forEach(f=>{ if(f.metadata && f.metadata.size){ totalBytes+=f.metadata.size; count++; } }); if(data.length<100) break; offset+=100; } return { bytes: totalBytes, count }; }
+async function updateStorageMeter(){ document.getElementById('storageUsedText').innerText='جارٍ حساب المساحة...'; try{ let img = await getBucketSize('car-images'); let vid = await getBucketSize('car-videos'); let usedMB = (img.bytes + vid.bytes) / (1024*1024); let freeMB = Math.max(0, STORAGE_LIMIT_MB - usedMB); let pct = Math.min(100, (usedMB/STORAGE_LIMIT_MB)*100); storageState = { usedMB, freeMB, imgCount: img.count, vidCount: vid.count }; document.getElementById('storageFill').style.width = Math.max(pct, 1) + '%'; document.getElementById('storageFill').style.background = pct>85 ? '#E31E24' : pct>60 ? '#F59E0B' : '#0A7A42'; document.getElementById('storageUsedText').innerText = `مستهلك: ${fmtMB(usedMB)} من ${fmtMB(STORAGE_LIMIT_MB)} (${pct.toFixed(1)}%)`; document.getElementById('storageFreeText').innerText = `المتبقي: ${fmtMB(freeMB)} - يكفي لحوالي ${Math.floor(freeMB/0.35)} صورة تقريبا`; document.getElementById('storageImgCount').innerText = img.count; document.getElementById('storageVidCount').innerText = vid.count; let warn=document.getElementById('storageWarn'); if(pct>85){ warn.style.color='#B91C1C'; warn.innerText='تنبيه: المساحة على وشك الامتلاء - احذف صور السيارات المباعة أو ترقِ الخطة.'; } else if(pct>60){ warn.style.color='#92400E'; warn.innerText='المساحة بدأت تمتلئ - راقب الرفع القادم.'; } else { warn.style.color='#0A7A42'; warn.innerText='المساحة ممتازة - يمكنك الرفع بأمان.'; } document.getElementById('uploadSpaceHint').innerText = `المساحة المتبقية الآن: ${fmtMB(freeMB)} - سيتم ضغط الصور تلقائيا لتوفير المساحة.`; }catch(e){ document.getElementById('storageUsedText').innerText='لم نستطع حساب المساحة - تحقق من إعداد التخزين'; } }
+async function decodeVIN(){ let vin=document.getElementById('fVin').value.trim().toUpperCase(); if(vin.length!==17){ document.getElementById('vinResult').innerHTML='<span style="color:#B91C1C">رقم الصندوق يجب أن يكون 17 حرفا</span>'; return; } document.getElementById('vinResult').innerHTML='جارٍ فك الرقم من NHTSA...'; try{ let res=await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesExtended/${vin}?format=json`); let j=await res.json(); let r=j.Results[0]; if(!r||!r.Make) throw new Error('no'); document.getElementById('vinResult').innerHTML=`<b style="color:#0A7A42">تم فك الرقم:</b> ${r.Make} ${r.Model} • ${r.ModelYear} • ${r.FuelTypePrimary||''} • ${r.PlantCountry||''}`; if(r.ModelYear) document.getElementById('fYear').value=r.ModelYear; if(r.Model) document.getElementById('fTitle').value=(r.Make+' '+r.Model).toUpperCase(); }catch(e){ document.getElementById('vinResult').innerHTML='<span style="color:#9A3412">لم نجد الرقم - أكمل البيانات يدويا</span>'; } }
+function handleImages(input){ let files=[...input.files]; if(!files.length) return; if(uploadedFiles.length + files.length > CFG.maxImages){ alert('يمكنك رفع حتى '+CFG.maxImages+' صورة'); files=files.slice(0, CFG.maxImages - uploadedFiles.length); } files.forEach(f=> compressImage(f, 1200, 0.75, (cf)=>{ uploadedFiles.push(cf); renderThumbs(); })); }
+function renderThumbs(){ if(uploadedFiles.length===0 && editingId){ let oldCar = cars.find(c=>String(c.id)===String(editingId)); if(oldCar && oldCar.images && oldCar.images.length){ let imgsJson=JSON.stringify(oldCar.images).replace(/"/g,'&quot;'); document.getElementById('thumbs').innerHTML = oldCar.images.map((u,i)=>`<div style="position:relative"><img src="${u}" onclick="event.stopPropagation();openLightbox(${imgsJson},${i},'${oldCar.title}')"><span style="display:block;font-size:10px;text-align:center;color:#0A7A42;font-weight:800">محفوظة - اضغط لعرض كامل</span></div>`).join(''); return; } } let newJson = JSON.stringify(uploadedFiles.map(f=>URL.createObjectURL(f))).replace(/"/g,'&quot;'); document.getElementById('thumbs').innerHTML = uploadedFiles.map((f,i)=>`<div style="position:relative"><img src="${URL.createObjectURL(f)}" onclick="event.stopPropagation();openLightbox(${newJson},${i},'صور جديدة')"><button onclick="event.stopPropagation();removeImg(${i})" style="position:absolute;top:-6px;left:-6px;background:#E31E24;color:#fff;width:20px;height:20px;border-radius:50%;font-size:11px">X</button><span style="display:block;font-size:10px;text-align:center">${(f.size/1024).toFixed(0)} KB</span></div>`).join('') + `<div style="width:100%;font-size:11px;color:#7A7A76">صور جديدة: ${uploadedFiles.length} / ${CFG.maxImages} - الصور القديمة محفوظة ولن تُحذف - المساحة المتبقية: ${fmtMB(storageState.freeMB)}</div>`; }
 function removeImg(i){ uploadedFiles.splice(i,1); renderThumbs(); }
-function compressImage(file, maxW, quality, cb){
-  const reader=new FileReader(); reader.onload=e=>{ const img=new Image(); img.onload=()=>{ const canvas=document.createElement('canvas'); let w=img.width,h=img.height; if(w>maxW){ h=h*maxW/w; w=maxW; } canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); canvas.toBlob(b=>cb(new File([b], file.name, {type:'image/jpeg'})), 'image/jpeg', quality); }; img.src=e.target.result; }; reader.readAsDataURL(file);
-}
-function handleVideo(input){ uploadedVideoFile=input.files[0]; if(uploadedVideoFile && uploadedVideoFile.size > CFG.maxVideoSizeMB*1024*1024){ alert('حجم الفيديو كبير - الأقصى '+CFG.maxVideoSizeMB+'MB'); uploadedVideoFile=null; return; } document.getElementById('videoPreview').innerHTML = uploadedVideoFile ? `<span style="font-size:12px;font-weight:800;color:#0A7A42">تم اختيار فيديو: ${uploadedVideoFile.name}</span>` : ''; }
-async function uploadFile(file, bucket){
-  const name=Date.now()+'-'+Math.random().toString(36).slice(2,8)+'-'+file.name.replace(/[^a-zA-Z0-9.-]/g,'_');
-  const { error } = await sb.storage.from(bucket).upload(name, file);
-  if(error) throw error;
-  const { data } = sb.storage.from(bucket).getPublicUrl(name);
-  return data.publicUrl;
-}
-async function saveCar(){
-  let title=document.getElementById('fTitle').value.trim();
-  let price=document.getElementById('fPrice').value;
-  let vin=document.getElementById('fVin').value.trim().toUpperCase();
-  if(!title||!price){ document.getElementById('formMsg').innerText='أدخل اسم السيارة والسعر'; return; }
-  if(vin && vin.length!==17){ document.getElementById('formMsg').innerText='رقم الصندوق يجب أن يكون 17 حرفا'; return; }
-  document.getElementById('formMsg').innerText='جارٍ رفع الصور والفيديو...';
-  try{
-    let oldImages=[];
-    let oldVideo='';
-    if(editingId){
-      let oldCar=cars.find(c=>String(c.id)===String(editingId));
-      if(oldCar){ oldImages=Array.isArray(oldCar.images)?oldCar.images:[]; oldVideo=oldCar.video||''; }
-    }
-    let newImageUrls=[];
-    for(let f of uploadedFiles){ let url=await uploadFile(f,'car-images'); console.log('تم رفع صورة:', url); newImageUrls.push(url); }
-    let finalImages=[...oldImages, ...newImageUrls].slice(0, CFG.maxImages);
-    let videoUrl=oldVideo;
-    if(uploadedVideoFile) videoUrl=await uploadFile(uploadedVideoFile,'car-videos');
-    let history=[
-      { stage:'قبل الشحن', km:document.getElementById('fOldKm').value||'', accident:document.getElementById('fOldAcc').value||'', plate:document.getElementById('fPlateOld').value||'', note:'معلوماتها في الخارج' },
-      { stage:'الشحن', km:'', accident:'', plate:'', note:'تتبع: '+(document.getElementById('fTrack').value||'') },
-      { stage:'بعد الشحن - نواكشوط', km:document.getElementById('fKm').value||'', accident:'تم الفحص', plate:document.getElementById('fPlateNew').value||'', note:'الجمركة: '+document.getElementById('fCustoms').value }
-    ];
-    let payload={
-      title, brand:document.getElementById('fBrand').value, type:document.getElementById('fType').value,
-      price:+price, year:+document.getElementById('fYear').value||2026, km:document.getElementById('fKm').value||'0',
-      gear:document.getElementById('fGear').value, fuel:document.getElementById('fFuel').value,
-      color:document.getElementById('fColor').value||'أبيض', status:document.getElementById('fStatus').value,
-      verified:document.getElementById('fVerified').checked, vin:vin,
-      track_code:document.getElementById('fTrack').value||'', track_step:+document.getElementById('fTrackStep').value,
-      plate_old:document.getElementById('fPlateOld').value||'', plate_new:document.getElementById('fPlateNew').value||'',
-      customs:document.getElementById('fCustoms').value, old_km:document.getElementById('fOldKm').value||'',
-      old_accident:document.getElementById('fOldAcc').value||'', description:document.getElementById('fDesc').value||'',
-      history:history,
-      images: finalImages,
-      video: videoUrl || null
-    };
-    let res;
-    if(editingId) res=await sb.from('cars').update(payload).eq('id', editingId);
-    else res=await sb.from('cars').insert(payload);
-    if(res.error) throw res.error;
-    document.getElementById('formMsg').innerText='تم حفظ ' + finalImages.length + ' صورة بنجاح';
-    clearForm(); loadCars(); alert('تم حفظ السيارة - ' + finalImages.length + ' صورة');
-  }catch(e){ document.getElementById('formMsg').innerText='خطأ: '+e.message; console.error(e); }
-}
+function compressImage(file, maxW, quality, cb){ const reader=new FileReader(); reader.onload=e=>{ const img=new Image(); img.onload=()=>{ const canvas=document.createElement('canvas'); let w=img.width,h=img.height; if(w>maxW){ h=h*maxW/w; w=maxW; } canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); canvas.toBlob(b=>cb(new File([b], file.name, {type:'image/jpeg'})), 'image/jpeg', quality); }; img.src=e.target.result; }; reader.readAsDataURL(file); }
+function handleVideo(input){ uploadedVideoFile=input.files[0]; if(uploadedVideoFile && uploadedVideoFile.size > CFG.maxVideoSizeMB*1024*1024){ alert('حجم الفيديو كبير - الأقصى '+CFG.maxVideoSizeMB+'MB'); uploadedVideoFile=null; return; } document.getElementById('videoPreview').innerHTML = uploadedVideoFile ? `<span style="font-size:12px;font-weight:800;color:#0A7A42">تم اختيار فيديو: ${uploadedVideoFile.name} - المساحة المتبقية: ${fmtMB(storageState.freeMB)}</span>` : ''; }
+async function uploadFile(file, bucket){ const name=Date.now()+'-'+Math.random().toString(36).slice(2,8)+'-'+file.name.replace(/[^a-zA-Z0-9.-]/g,'_'); const { error } = await sb.storage.from(bucket).upload(name, file); if(error) throw error; const { data } = sb.storage.from(bucket).getPublicUrl(name); return data.publicUrl; }
+async function saveCar(){ let title=document.getElementById('fTitle').value.trim(); let price=document.getElementById('fPrice').value; let vin=document.getElementById('fVin').value.trim().toUpperCase(); if(!title||!price){ document.getElementById('formMsg').innerText='أدخل اسم السيارة والسعر'; return; } if(vin && vin.length!==17){ document.getElementById('formMsg').innerText='رقم الصندوق يجب أن يكون 17 حرفا'; return; } document.getElementById('formMsg').innerText='جارٍ رفع الصور والفيديو...'; try{ let oldImages=[]; let oldVideo=''; if(editingId){ let oldCar=cars.find(c=>String(c.id)===String(editingId)); if(oldCar){ oldImages=Array.isArray(oldCar.images)?oldCar.images:[]; oldVideo=oldCar.video||''; } } let newImageUrls=[]; for(let f of uploadedFiles){ let url=await uploadFile(f,'car-images'); newImageUrls.push(url); } let finalImages=[...oldImages, ...newImageUrls].slice(0, CFG.maxImages); let videoUrl=oldVideo; if(uploadedVideoFile) videoUrl=await uploadFile(uploadedVideoFile,'car-videos'); let history=[ { stage:'قبل الشحن', km:document.getElementById('fOldKm').value||'', accident:document.getElementById('fOldAcc').value||'', plate:document.getElementById('fPlateOld').value||'', note:'معلوماتها في الخارج' }, { stage:'الشحن', km:'', accident:'', plate:'', note:'تتبع: '+(document.getElementById('fTrack').value||'') }, { stage:'بعد الشحن - نواكشوط', km:document.getElementById('fKm').value||'', accident:'تم الفحص', plate:document.getElementById('fPlateNew').value||'', note:'الجمركة: '+document.getElementById('fCustoms').value } ]; let payload={ title, brand:document.getElementById('fBrand').value, type:document.getElementById('fType').value, price:+price, year:+document.getElementById('fYear').value||2026, km:document.getElementById('fKm').value||'0', gear:document.getElementById('fGear').value, fuel:document.getElementById('fFuel').value, color:document.getElementById('fColor').value||'أبيض', status:document.getElementById('fStatus').value, verified:document.getElementById('fVerified').checked, vin:vin, track_code:document.getElementById('fTrack').value||'', track_step:+document.getElementById('fTrackStep').value, plate_old:document.getElementById('fPlateOld').value||'', plate_new:document.getElementById('fPlateNew').value||'', customs:document.getElementById('fCustoms').value, old_km:document.getElementById('fOldKm').value||'', old_accident:document.getElementById('fOldAcc').value||'', description:document.getElementById('fDesc').value||'', history:history, images: finalImages, video: videoUrl || null }; let res; if(editingId) res=await sb.from('cars').update(payload).eq('id', editingId); else res=await sb.from('cars').insert(payload); if(res.error) throw res.error; document.getElementById('formMsg').innerText='تم حفظ ' + finalImages.length + ' صورة بنجاح'; clearForm(); loadCars(); updateStorageMeter(); alert('تم حفظ السيارة - ' + finalImages.length + ' صورة'); }catch(e){ document.getElementById('formMsg').innerText='خطأ: '+e.message; console.error(e); } }
 function clearForm(){ ['fVin','fTitle','fPrice','fYear','fKm','fColor','fOldKm','fOldAcc','fPlateOld','fPlateNew','fTrack','fDesc'].forEach(id=>document.getElementById(id).value=''); uploadedFiles=[]; uploadedVideoFile=null; document.getElementById('thumbs').innerHTML=''; document.getElementById('videoPreview').innerHTML=''; document.getElementById('vinResult').innerHTML=''; editingId=null; document.getElementById('saveBtn').innerText='حفظ ملف السيارة المدموج'; }
-function editCar(id){
-  let c=cars.find(x=>String(x.id)===String(id)); editingId=id;
-  document.getElementById('fVin').value=c.vin||''; document.getElementById('fTitle').value=c.title; document.getElementById('fBrand').value=c.brand; document.getElementById('fType').value=c.type; document.getElementById('fPrice').value=c.price; document.getElementById('fYear').value=c.year; document.getElementById('fStatus').value=c.status; document.getElementById('fKm').value=c.km; document.getElementById('fGear').value=c.gear; document.getElementById('fFuel').value=c.fuel; document.getElementById('fColor').value=c.color; document.getElementById('fOldKm').value=c.old_km||''; document.getElementById('fOldAcc').value=c.old_accident||''; document.getElementById('fPlateOld').value=c.plate_old||''; document.getElementById('fPlateNew').value=c.plate_new||''; document.getElementById('fCustoms').value=c.customs; document.getElementById('fTrack').value=c.track_code||''; document.getElementById('fTrackStep').value=c.track_step||0; document.getElementById('fVerified').checked=c.verified; document.getElementById('fDesc').value=c.description||'';
-  uploadedFiles=[];
-  document.getElementById('thumbs').innerHTML = (c.images||[]).length ? (c.images||[]).map(u=>`<div style="position:relative"><img src="${u}"><span style="display:block;font-size:10px;text-align:center;color:#0A7A42;font-weight:800">محفوظة</span></div>`).join('') + `<div style="width:100%;font-size:11px;color:#7A7A76">لديك ${(c.images||[]).length} صورة محفوظة - ارفع صورا جديدة لإضافتها، لن تُحذف القديمة</div>` : '<span style="font-size:11px;color:#B91C1C">لا توجد صور محفوظة لهذه السيارة - ارفع صورا جديدة</span>';
-  document.getElementById('videoPreview').innerHTML = c.video ? `<span style="font-size:12px;color:#0A7A42;font-weight:800">فيديو محفوظ: موجود</span>` : '';
-  document.getElementById('saveBtn').innerText='تحديث ملف السيارة';
-  showTab('tab-add', document.querySelectorAll('.tabs button')[0]); window.scrollTo({top:0});
-}
-async function deleteCar(id){ if(!confirm('حذف هذه السيارة؟')) return; await sb.from('cars').delete().eq('id', id); loadCars(); }
+function editCar(id){ let c=cars.find(x=>String(x.id)===String(id)); editingId=id; document.getElementById('fVin').value=c.vin||''; document.getElementById('fTitle').value=c.title; document.getElementById('fBrand').value=c.brand; document.getElementById('fType').value=c.type; document.getElementById('fPrice').value=c.price; document.getElementById('fYear').value=c.year; document.getElementById('fStatus').value=c.status; document.getElementById('fKm').value=c.km; document.getElementById('fGear').value=c.gear; document.getElementById('fFuel').value=c.fuel; document.getElementById('fColor').value=c.color; document.getElementById('fOldKm').value=c.old_km||''; document.getElementById('fOldAcc').value=c.old_accident||''; document.getElementById('fPlateOld').value=c.plate_old||''; document.getElementById('fPlateNew').value=c.plate_new||''; document.getElementById('fCustoms').value=c.customs; document.getElementById('fTrack').value=c.track_code||''; document.getElementById('fTrackStep').value=c.track_step||0; document.getElementById('fVerified').checked=c.verified; document.getElementById('fDesc').value=c.description||''; uploadedFiles=[]; let imgsJson=JSON.stringify(c.images||[]).replace(/"/g,'&quot;'); document.getElementById('thumbs').innerHTML = (c.images||[]).length ? (c.images||[]).map((u,i)=>`<div style="position:relative"><img src="${u}" onclick="openLightbox(${imgsJson},${i},'${c.title}')"><span style="display:block;font-size:10px;text-align:center;color:#0A7A42;font-weight:800">محفوظة - اضغط لعرض كامل</span></div>`).join('') + `<div style="width:100%;font-size:11px;color:#7A7A76">لديك ${(c.images||[]).length} صورة محفوظة - ارفع صورا جديدة لإضافتها، لن تُحذف القديمة - المتبقي: ${fmtMB(storageState.freeMB)}</div>` : '<span style="font-size:11px;color:#B91C1C">لا توجد صور محفوظة لهذه السيارة - ارفع صورا جديدة</span>'; document.getElementById('videoPreview').innerHTML = c.video ? `<span style="font-size:12px;color:#0A7A42;font-weight:800">فيديو محفوظ: موجود</span>` : ''; document.getElementById('saveBtn').innerText='تحديث ملف السيارة'; showTab('tab-add', document.querySelectorAll('.tabs button')[0]); window.scrollTo({top:0}); }
+async function deleteCar(id){ if(!confirm('حذف هذه السيارة؟')) return; await sb.from('cars').delete().eq('id', id); loadCars(); updateStorageMeter(); }
 function printQR(id){ let c=cars.find(x=>String(x.id)===String(id)); let qr=encodeURIComponent(JSON.stringify({id:c.id,title:c.title,price:c.price,vin:c.vin})); let w=window.open(''); w.document.write(`<div style="text-align:center;font-family:Arial;padding:30px"><h2>بورصة ساحل</h2><h3>${c.title}</h3><p>${Number(c.price).toLocaleString()} MRU • ${c.year} • VIN: ${c.vin}</p><img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qr}"><p>امسح الكود لعرض ملف السيارة</p><button onclick="window.print()">طباعة</button></div>`); }
 function startScan(){ if(!window.Html5Qrcode){ alert('تحقق من الاتصال'); return; } scanner=new Html5Qrcode("reader"); scanner.start({facingMode:"environment"},{fps:10,qrbox:250},(decoded)=>{ document.getElementById('scanResult').innerHTML=`<div style="background:#E8F5E9;padding:12px;border-radius:12px;font-weight:800">تم مسح: ${decoded}</div>`; try{ let d=JSON.parse(decoded); let car=cars.find(c=>String(c.id)===String(d.id)); if(car) editCar(car.id); }catch(e){} stopScan(); },()=>{}); }
 function stopScan(){ if(scanner){ scanner.stop().then(()=>scanner.clear()).catch(()=>{}); scanner=null; } }
+let lbImages=[], lbIndex=0, lbTitle='';
+function openLightbox(images,index,title){ lbImages=images||[]; lbIndex=index||0; lbTitle=title||'بورصة ساحل'; if(!lbImages.length) return; document.getElementById('lightbox').classList.add('show'); document.body.style.overflow='hidden'; renderLightbox(); }
+function renderLightbox(){ let img=document.getElementById('lbImg'); img.classList.remove('zoomed'); img.src=lbImages[lbIndex]; document.getElementById('lbTitle').innerText=lbTitle; document.getElementById('lbCounter').innerText=(lbIndex+1)+' / '+lbImages.length; document.getElementById('lbThumbs').innerHTML=lbImages.map((u,i)=>`<img src="${u}" onclick="lbGo(${i})" class="${i===lbIndex?'active':''}" onerror="this.style.display='none'">`).join(''); }
+function lbGo(i){ lbIndex=i; renderLightbox(); }
+function lbNext(){ lbIndex=(lbIndex+1)%lbImages.length; renderLightbox(); }
+function lbPrev(){ lbIndex=(lbIndex-1+lbImages.length)%lbImages.length; renderLightbox(); }
+function toggleZoom(){ document.getElementById('lbImg').classList.toggle('zoomed'); }
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('show'); document.body.style.overflow=''; }
+document.addEventListener('keydown',e=>{ let lb=document.getElementById('lightbox'); if(!lb.classList.contains('show')) return; if(e.key==='Escape') closeLightbox(); if(e.key==='ArrowLeft') lbNext(); if(e.key==='ArrowRight') lbPrev(); });
+let lbTouchX=0; let lbStage=document.getElementById('lbStage'); if(lbStage){ lbStage.addEventListener('touchstart',e=>{ lbTouchX=e.touches[0].clientX; },{passive:true}); lbStage.addEventListener('touchend',e=>{ let dx=e.changedTouches[0].clientX-lbTouchX; if(Math.abs(dx)>50){ if(dx>0) lbPrev(); else lbNext(); } },{passive:true}); }
 </script>
 </body>
 </html>
